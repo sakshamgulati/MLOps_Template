@@ -1,0 +1,47 @@
+[MFLOG|0|2023-11-01T11:28:55.094202Z|runtime|936795d6-0194-410b-b8ea-b46216b3709e]<flow MyFlow step ml_flow> failed:
+[MFLOG|0|2023-11-01T11:28:56.818729Z|runtime|1d9d0a32-d416-43c2-b1ec-78b00dbdf9ae]    Internal error
+[MFLOG|0|2023-11-01T11:28:56.820776Z|runtime|0b392de4-a2bb-4555-af87-d923b426c0db]Traceback (most recent call last):
+[MFLOG|0|2023-11-01T11:28:56.820870Z|runtime|60f90dfd-3a64-45b3-b46c-a023b6015eb6]  File "/Users/sakshamgulati/.local/share/virtualenvs/MLOps_Template-k_6XISXV/lib/python3.10/site-packages/metaflow/cli.py", line 1175, in main
+[MFLOG|0|2023-11-01T11:28:56.820920Z|runtime|2cec34a2-365f-4329-a06a-e71a1abf16ea]    start(auto_envvar_prefix="METAFLOW", obj=state)
+[MFLOG|0|2023-11-01T11:28:56.820954Z|runtime|fef94b47-e4d2-4296-adc0-3a34ab23171a]  File "/Users/sakshamgulati/.local/share/virtualenvs/MLOps_Template-k_6XISXV/lib/python3.10/site-packages/metaflow/tracing/__init__.py", line 25, in wrapper_func
+[MFLOG|0|2023-11-01T11:28:56.820995Z|runtime|1a3106bc-52bc-4905-9dc5-636edf9be217]    return func(args, kwargs)
+[MFLOG|0|2023-11-01T11:28:56.937510Z|runtime|1aefa8ea-5b69-4b2e-aa21-06fede1eebd0]  File "/Users/sakshamgulati/.local/share/virtualenvs/MLOps_Template-k_6XISXV/lib/python3.10/site-packages/metaflow/_vendor/click/core.py", line 829, in __call__
+[MFLOG|0|2023-11-01T11:28:56.937699Z|runtime|1c0c7d85-7c86-40b6-b05b-fe55b049e953]    return self.main(args, kwargs)
+[MFLOG|0|2023-11-01T11:28:56.937749Z|runtime|e46d698f-4fa7-404d-9618-48293602d487]  File "/Users/sakshamgulati/.local/share/virtualenvs/MLOps_Template-k_6XISXV/lib/python3.10/site-packages/metaflow/_vendor/click/core.py", line 782, in main
+[MFLOG|0|2023-11-01T11:28:56.937787Z|runtime|77956249-a9ae-4c93-9e64-ae78ebe8f5e2]    rv = self.invoke(ctx)
+[MFLOG|0|2023-11-01T11:28:56.937823Z|runtime|ae7ffc93-63d9-4ef0-b2ad-a6aa62672c50]  File "/Users/sakshamgulati/.local/share/virtualenvs/MLOps_Template-k_6XISXV/lib/python3.10/site-packages/metaflow/_vendor/click/core.py", line 1259, in invoke
+[MFLOG|0|2023-11-01T11:28:56.937853Z|runtime|f976f950-4288-471d-90f2-67876ba71d74]    return _process_result(sub_ctx.command.invoke(sub_ctx))
+[MFLOG|0|2023-11-01T11:28:56.937882Z|runtime|a2424e3e-be57-4247-b03e-b6a26dd49361]  File "/Users/sakshamgulati/.local/share/virtualenvs/MLOps_Template-k_6XISXV/lib/python3.10/site-packages/metaflow/_vendor/click/core.py", line 1066, in invoke
+[MFLOG|0|2023-11-01T11:28:56.937911Z|runtime|bf3629ab-583c-4e04-bf62-b094c8fe7080]    return ctx.invoke(self.callback, ctx.params)
+[MFLOG|0|2023-11-01T11:28:56.937935Z|runtime|0879bc8e-72e0-4887-9aae-2423b2fe6356]  File "/Users/sakshamgulati/.local/share/virtualenvs/MLOps_Template-k_6XISXV/lib/python3.10/site-packages/metaflow/_vendor/click/core.py", line 610, in invoke
+[MFLOG|0|2023-11-01T11:28:56.937966Z|runtime|f7ea056e-68c0-4b42-bc2f-ba52d6938eff]    return callback(args, kwargs)
+[MFLOG|0|2023-11-01T11:28:56.937990Z|runtime|fc3593f7-eb96-458b-934c-85ccfa37f5d0]  File "/Users/sakshamgulati/.local/share/virtualenvs/MLOps_Template-k_6XISXV/lib/python3.10/site-packages/metaflow/_vendor/click/decorators.py", line 21, in new_func
+[MFLOG|0|2023-11-01T11:28:56.938015Z|runtime|7e9e75a9-97ac-4816-8351-e89fcce1734f]    return f(get_current_context(), args, kwargs)
+[MFLOG|0|2023-11-01T11:28:56.938047Z|runtime|d5ef8a56-91f9-4408-8f59-44a3ebd0402e]  File "/Users/sakshamgulati/.local/share/virtualenvs/MLOps_Template-k_6XISXV/lib/python3.10/site-packages/metaflow/cli.py", line 582, in step
+[MFLOG|0|2023-11-01T11:28:56.938079Z|runtime|6f501c3b-f53b-4776-91e5-d8e72e104def]    task.run_step(
+[MFLOG|0|2023-11-01T11:28:56.938104Z|runtime|7b15cff7-90b4-46cd-aafa-39ba85653762]  File "/Users/sakshamgulati/.local/share/virtualenvs/MLOps_Template-k_6XISXV/lib/python3.10/site-packages/metaflow/task.py", line 596, in run_step
+[MFLOG|0|2023-11-01T11:28:56.938134Z|runtime|c488c80c-90fd-4dd4-84f2-8c9ccdb2e39e]    self._exec_step_function(step_func)
+[MFLOG|0|2023-11-01T11:28:56.938164Z|runtime|7ab1da8c-7c0d-448d-ba9a-83adda8af974]  File "/Users/sakshamgulati/.local/share/virtualenvs/MLOps_Template-k_6XISXV/lib/python3.10/site-packages/metaflow/task.py", line 57, in _exec_step_function
+[MFLOG|0|2023-11-01T11:28:56.938188Z|runtime|ddf431cf-a1ff-4278-85fa-f4b918d9728a]    step_function()
+[MFLOG|0|2023-11-01T11:28:56.938217Z|runtime|67ad2015-3fbb-4169-9fde-21a801a4b648]  File "/Users/sakshamgulati/MLOps_Template/deploy.py", line 43, in ml_flow
+[MFLOG|0|2023-11-01T11:28:56.938241Z|runtime|58b360a1-1dbe-474d-a087-6b37a3d7d38e]    self.metric=l_reg.model(self.X_train,self.X_test,self.y_train,self.y_test)
+[MFLOG|0|2023-11-01T11:28:56.938265Z|runtime|531fbfb9-7bef-4448-af00-b2638ce2d88d]  File "/Users/sakshamgulati/MLOps_Template/src/ModelOps/model_fit.py", line 13, in model
+[MFLOG|0|2023-11-01T11:28:56.938291Z|runtime|841a33ca-a5ce-4244-84fb-7df31f0eb0a8]    reg = LinearRegression().fit(X_train, y_train)
+[MFLOG|0|2023-11-01T11:28:56.938316Z|runtime|5fbf3b11-1c1a-4978-bac1-4fb6b5494e94]  File "/Users/sakshamgulati/.local/share/virtualenvs/MLOps_Template-k_6XISXV/lib/python3.10/site-packages/sklearn/base.py", line 1152, in wrapper
+[MFLOG|0|2023-11-01T11:28:56.938341Z|runtime|8b3c54cf-066d-4eb8-8cc5-a227e756ce97]    return fit_method(estimator, args, kwargs)
+[MFLOG|0|2023-11-01T11:28:56.938367Z|runtime|d6c7f72e-98f2-4ccb-b93b-f8439dba41ca]  File "/Users/sakshamgulati/.local/share/virtualenvs/MLOps_Template-k_6XISXV/lib/python3.10/site-packages/sklearn/linear_model/_base.py", line 678, in fit
+[MFLOG|0|2023-11-01T11:28:56.938401Z|runtime|c89fa798-de58-46bc-90ac-5461d18c82a1]    X, y = self._validate_data(
+[MFLOG|0|2023-11-01T11:28:56.938424Z|runtime|9cdb12c6-daad-4e84-8823-96640d4a2682]  File "/Users/sakshamgulati/.local/share/virtualenvs/MLOps_Template-k_6XISXV/lib/python3.10/site-packages/sklearn/base.py", line 622, in _validate_data
+[MFLOG|0|2023-11-01T11:28:56.938448Z|runtime|ce292ee6-bb48-4f26-9902-2cf18e16afca]    X, y = check_X_y(X, y, check_params)
+[MFLOG|0|2023-11-01T11:28:56.938472Z|runtime|4d13f82b-28d8-4748-98e2-1ca7a67ebd71]  File "/Users/sakshamgulati/.local/share/virtualenvs/MLOps_Template-k_6XISXV/lib/python3.10/site-packages/sklearn/utils/validation.py", line 1146, in check_X_y
+[MFLOG|0|2023-11-01T11:28:56.938497Z|runtime|53aee8b8-e5dd-47e2-9151-c149605a1a27]    X = check_array(
+[MFLOG|0|2023-11-01T11:28:56.938520Z|runtime|4e53e73b-3d97-4697-b1ab-a9073b1d9002]  File "/Users/sakshamgulati/.local/share/virtualenvs/MLOps_Template-k_6XISXV/lib/python3.10/site-packages/sklearn/utils/validation.py", line 957, in check_array
+[MFLOG|0|2023-11-01T11:28:56.938548Z|runtime|ec3fd99f-484c-4e16-9cfe-81c305a6542b]    _assert_all_finite(
+[MFLOG|0|2023-11-01T11:28:56.938574Z|runtime|5f18912e-f36f-4ece-9f07-e0ce052c7446]  File "/Users/sakshamgulati/.local/share/virtualenvs/MLOps_Template-k_6XISXV/lib/python3.10/site-packages/sklearn/utils/validation.py", line 122, in _assert_all_finite
+[MFLOG|0|2023-11-01T11:28:56.938606Z|runtime|2daa5422-ed5d-43c1-be2a-ea999442577d]    _assert_all_finite_element_wise(
+[MFLOG|0|2023-11-01T11:28:56.938637Z|runtime|18e45367-d9df-46bc-84d2-7dfd1247e502]  File "/Users/sakshamgulati/.local/share/virtualenvs/MLOps_Template-k_6XISXV/lib/python3.10/site-packages/sklearn/utils/validation.py", line 171, in _assert_all_finite_element_wise
+[MFLOG|0|2023-11-01T11:28:56.938673Z|runtime|f2208d83-ca18-4eb4-8e9d-1364a2c8a7be]    raise ValueError(msg_err)
+[MFLOG|0|2023-11-01T11:28:56.938704Z|runtime|c4acb0c1-57ce-4ecd-a04b-c5d3b9984f88]ValueError: Input X contains NaN.
+[MFLOG|0|2023-11-01T11:28:56.938732Z|runtime|5ea30280-dc79-4aaa-bfd9-d88886c269f7]LinearRegression does not accept missing values encoded as NaN natively. For supervised learning, you might want to consider sklearn.ensemble.HistGradientBoostingClassifier and Regressor which accept missing values encoded as NaNs natively. Alternatively, it is possible to preprocess the data, for instance by using an imputer transformer in a pipeline or drop samples with missing values. See https://scikit-learn.org/stable/modules/impute.html You can find a list of all estimators that handle NaN values at the following page: https://scikit-learn.org/stable/modules/impute.html#estimators-that-handle-nan-values
+[MFLOG|0|2023-11-01T11:28:56.938759Z|runtime|eae2c3dc-cf36-41bf-96b3-44695e9fd7fe]
+[MFLOG|0|2023-11-01T11:28:56.939317Z|runtime|ce689b21-b7b0-4964-8772-77b80f873fa7]Task failed.

@@ -1,10 +1,20 @@
 #class to write metaflow production steps
-from metaflow import FlowSpec,step
-from src import ModelOps,DataOps
+from metaflow import FlowSpec,step,Parameter,IncludeFile
 
 
+#TODO: Add dependecies to the flow
+#TODO: Add config file to the flow
+#TODO: run the flow locally and view it in ARGO
+# @conda_base(python='3.10.1',
+#            packages={'scikit-learn': '1.3.2',
+#                      'pandas': '2.1.2',
+#                      'numpy': '1.26.1',
+#                      'python-dotenv': '0.21.1',
+                    #  'confuse':'2.0.1'})
 class MyFlow(FlowSpec):
-
+    animal=Parameter('animal',help='Animal to be classified',default='cat')
+    #include the conf/config.yaml file in includefile
+    includefile=IncludeFile('configfile',help='Include the config file',default='conf/smartprice.yaml')
     @step
     def start(self):
         print('Starting the flow') 
@@ -12,6 +22,7 @@ class MyFlow(FlowSpec):
     
     @step
     def data_load_flow(self):
+        from src import DataOps
         print('Loading data')
         self.feat=DataOps.feature_engg_class()
         self.num_df,self.cat_df,self.output=self.feat.load_data()
@@ -26,6 +37,7 @@ class MyFlow(FlowSpec):
     
     @step
     def ml_flow(self):
+        from src import ModelOps
         print('Training model')
         l_reg=ModelOps.model_fit()
         self.metric=l_reg.model(self.X_train,self.X_test,self.y_train,self.y_test)
@@ -33,7 +45,7 @@ class MyFlow(FlowSpec):
     
     @step
     def publishing_api(self):
-        print('End of the flow')
+        print('publishing of the results')
         self.next(self.end)
     
     @step
