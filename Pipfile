@@ -9,6 +9,7 @@ pandas = "*"
 confuse = "*"
 scikit-learn = "*"
 metaflow = "*"
+pytest = "*"
 
 [dev-packages]
 

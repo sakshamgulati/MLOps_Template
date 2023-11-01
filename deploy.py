@@ -2,9 +2,6 @@
 from metaflow import FlowSpec,step,Parameter,IncludeFile
 
 
-#TODO: Add dependecies to the flow
-#TODO: Add config file to the flow
-#TODO: run the flow locally and view it in ARGO
 # @conda_base(python='3.10.1',
 #            packages={'scikit-learn': '1.3.2',
 #                      'pandas': '2.1.2',
@@ -12,7 +9,6 @@ from metaflow import FlowSpec,step,Parameter,IncludeFile
 #                      'python-dotenv': '0.21.1',
                     #  'confuse':'2.0.1'})
 class MyFlow(FlowSpec):
-    animal=Parameter('animal',help='Animal to be classified',default='cat')
     #include the conf/config.yaml file in includefile
     includefile=IncludeFile('configfile',help='Include the config file',default='conf/smartprice.yaml')
     @step
