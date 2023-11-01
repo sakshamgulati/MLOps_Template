@@ -7,8 +7,8 @@ name = "pypi"
 python-dotenv = "==0.21.1"
 pandas = "*"
 confuse = "*"
-sklearn = "*"
 scikit-learn = "*"
+metaflow = "*"
 
 [dev-packages]
 
