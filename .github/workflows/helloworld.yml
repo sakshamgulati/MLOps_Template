@@ -1,0 +1,29 @@
+name: Run Metaflow script on approved merge request
+
+on:
+  workflow_dispatch:
+  # pull_request:
+  #   types: [closed]
+
+jobs:
+  build:
+    # if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      uses: VaultVulp/action-pipenv@v2.0.1
+      with:
+        command: install -d
+
+    - name: Run Metaflow script
+      run: |
+        python helloworld.py run
