@@ -1,7 +1,9 @@
 from src import DataOps
 import pandas as pd
-
-#write me a basic unit test for modelops modules
+import sys, os
+myPath = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, myPath + '/../')
+ #write me a basic unit test for modelops modules
 def test_pytest():
     assert 1==1
     
