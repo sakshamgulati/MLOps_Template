@@ -27,3 +27,4 @@ jobs:
     - name: Run Metaflow script
       run: |
         python helloworld.py run
+        echo "Hello, World!"
