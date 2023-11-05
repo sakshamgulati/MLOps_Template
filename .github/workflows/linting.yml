@@ -5,11 +5,11 @@
 name: Unit Test and Linters
 
 on:
- workflow_dispatch:
-  # push:
-  #   branches: [ $default-branch ]
-  # pull_request:
-  #   branches: [ $default-branch ]
+#  workflow_dispatch:
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ $default-branch ]
 
 permissions:
   contents: read
