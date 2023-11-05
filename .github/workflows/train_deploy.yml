@@ -32,5 +32,5 @@ jobs:
     - name: Run Metaflow script
       run: |
         pipenv install metaflow
-        pipenv install
+        pipenv shell
         python helloworld.py run
