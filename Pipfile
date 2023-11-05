@@ -10,6 +10,8 @@ confuse = "*"
 scikit-learn = "*"
 metaflow = "*"
 pytest = "*"
+mlflow = "*"
+wandb = "*"
 
 [dev-packages]
 
