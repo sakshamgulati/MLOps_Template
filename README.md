@@ -8,3 +8,6 @@ This project serves as a comprehensive guide to implementing Continuous Integrat
 4. **Continuous Integration/Continuous Deployment:** Our CICD pipeline relies on GitHub Actions and Metaflow scripts, making it straightforward to train models on cost-free Ubuntu machines provided by GitHub. Once your model is trained, you can seamlessly publish it in your model repository, managed by Weights and Biases.
 
 Should you choose to train a different, improved model, you can utilize the same scripts to train and publish it within the same model repository. However, when transitioning to deploying the model in a production environment, it's essential to pass multiple unit tests and adhere to linting standards, all of which are powered by Pytest.
+
+**Motto and inspiration-**
+<img width="443" alt="image" src="https://github.com/sakshamgulati/MLOps_Template/assets/16202917/c175e03e-c753-474f-b6a5-17b792b297e2">
