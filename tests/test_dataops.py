@@ -27,28 +27,41 @@ def numerical_dataframe():
 
 # function to create a sample categorical output dataframe
 def output_dataframe():
-    df = pd.DataFrame({"Output": [1, 0, 1]})
+    # create a dummy dataframe with sample data and target
+    df = pd.DataFrame({"Output": [1, 2, 3]})
     return df
 
 
 def test_featurengg():
     num_df = numerical_dataframe()
-    cat_df = categorical_dataframe()
     feat = DataOps.feature_engg_class()
-    fin_df = feat.min_max_scaling(cat_df, num_df)
+    fin_df = pd.DataFrame(feat.standard_scaling(num_df))
     # assert all values in the dataframe are between 0 and 1
     assert fin_df.values.max() != 0
     # assert there are no nulls
     assert fin_df.isnull().sum().sum() == 0
 
 
-def test_data():
-    num_df = numerical_dataframe()
+def test_one_hot_encode():
+    # unit test to test the one_hot_encode function of feature_engg_class
     cat_df = categorical_dataframe()
     feat = DataOps.feature_engg_class()
-    fin_df = feat.min_max_scaling(cat_df, num_df)
+    fin_df = pd.DataFrame(feat.one_hot_encode(cat_df))
+    # assert the number of columns have increased by 2
+    assert len(fin_df.columns) == 8
+    # assert the number of rows have not changed
+    assert len(fin_df) == 3
+    # assert the values are binary
+    assert fin_df.values.max() == 1
+    assert fin_df.values.min() == 0
+
+
+# test the split function of feature_engg_class
+def test_split():
+    num_df = numerical_dataframe()
+    feat = DataOps.feature_engg_class()
     output = output_dataframe()
-    X_train, X_test, y_train, y_test = feat.split(fin_df, output)
+    X_train, X_test, y_train, y_test = feat.split(num_df, output)
     assert len(X_train) > 0
     # assert output variable is a categorical
     # assert y_train.dtypes=='int64'

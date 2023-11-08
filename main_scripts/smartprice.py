@@ -1,11 +1,21 @@
-from src import ModelOps,DataOps
+import sys
+import logging
+
+sys.path.insert(0, "C:/Users/saksh/MLOps_Template")
+from src.ModelOps import ModelFit
+from src.DataOps import feature_engg_class
+
+logging.info("Internal modules loaded")
 
 
-feat=DataOps.feature_engg_class()
-num_df,cat_df,output=feat.load_data()
-fin_df=feat.min_max_scaling(cat_df,num_df)
-X_train,X_test,y_train,y_test=feat.split(fin_df,output)
-print(f"length of the train set:{len(X_train)}")
+diabetes = feature_engg_class()
+data, target = diabetes.load_data()
+data = diabetes.standard_scaling(data)
+X_train, X_test, y_train, y_test = diabetes.split(data, target)
+logging.info(f"length of the train set:{len(X_train)}")
 
-l_reg=ModelOps.model_fit()
-metric=l_reg.model(X_train,X_test,y_train,y_test)
+# random forest regressor with default parameters
+rf_reg = ModelFit()
+model = rf_reg.model(X_train, X_test, y_train, y_test)
+rf_reg.save_model(model)
+logging.info("Model Saved")

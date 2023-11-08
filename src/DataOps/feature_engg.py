@@ -2,54 +2,117 @@ import pandas as pd
 import numpy as np
 import logging
 import confuse
-from sklearn import preprocessing
+from sklearn import preprocessing, datasets
 from sklearn.model_selection import train_test_split
 import wandb
+from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import OneHotEncoder
+
+logging.basicConfig(level=logging.INFO)
 
 
 class feature_engg_class:
+    """
+    #description for this class
+    This class is used to load the data,
+    scale the data and split the data into train and test set.
+    ################################
+    #Parameters
+    config_file: str
+        Path to the config file
+    ################################
+    #Returns
+    None
+    """
+
     def __init__(self, config_file="./conf/smartprice.yaml"):
         self.logger = logging.getLogger(__name__)
         self.config = confuse.Configuration("SmartPrice", __name__)
         self.config.set_file(config_file)
         self.DRIVER_PATH = self.config["DRIVER_PATH"].get(str)
+        self.diabetes = datasets.load_diabetes()
 
     def load_data(self):
-        df = pd.read_csv(self.DRIVER_PATH, on_bad_lines="skip", usecols=range(16))
-        wandb.init(project="ml-ops-template")
+        """
+        #description for this function
+        This function is used to load the data from the sklearn datasets.
+        ################################
+        #Parameters
+        None
+        ################################
+        #Returns
+        data: numpy array
+            The data from the sklearn datasets
+        target: numpy array
+        """
+        data = self.diabetes.data
+        target = self.diabetes.target
+        logging.info("Data loaded from sklearn datasets")
+        imputer = SimpleImputer(missing_values=np.nan, strategy="mean")
+        data_imputed = imputer.fit_transform(data)
+        logging.info("Data imputed for missing values")
+        return data_imputed, target
 
-        cols_to_remove = [
-            "vin",
-            "seller",
-            "year",
-            "saledate",
-            "make",
-            "model",
-            "trim",
-            "state",
-        ]
-        df.drop(cols_to_remove, axis=1, inplace=True)
-        df["condition"] = df["condition"].astype("category")
-        cat_col = [col for col in df.columns if df[col].dtype == "object"]
-        cat_df = df[cat_col]
-        num_df = df.drop(cat_col, axis=1)
-        output = num_df["sellingprice"]
-        num_df = num_df.drop(["sellingprice"], axis=1)
-        num_df = num_df.drop(["condition"], axis=1)
-        wandb.log({"Training Size": df.shape[0], "numerical Size": num_df.shape[1]})
-        return num_df, cat_df, output
+    def standard_scaling(self, data):
+        """
+        #description for this function
+        This function is used to scale the data using StandardScaler.
+        ################################
+        #Parameters
+        data: numpy array
+            The data from the sklearn datasets
+        ################################
+        #Returns
+        data_scaled: numpy array
+            The scaled data
 
-    def min_max_scaling(self, cat_df, num_df):
-        one_hot_df = pd.get_dummies(cat_df).reset_index()
-        x = num_df.values  # returns a numpy array
-        min_max_scaler = preprocessing.MinMaxScaler()
-        x_scaled = min_max_scaler.fit_transform(x)
-        num_df = pd.DataFrame(x_scaled, columns=num_df.columns)
-        fin_df = pd.concat([num_df, one_hot_df], axis=1)
-        return fin_df
+        """
+        scaler = StandardScaler()
+        data_scaled = scaler.fit_transform(data)
+        logging.info("Data Scaled")
+        return data_scaled
 
-    def split(self, fin_df, output):
+    def one_hot_encode(self, data):
+        """
+        #description for this function
+        This function is used to one hot encode the data.
+        ################################
+        #Parameters
+        data: numpy array
+            The data from the sklearn datasets
+        ################################
+        #Returns
+        data_encoded: numpy array
+            The one hot encoded data
+
+        """
+        encoder = OneHotEncoder(sparse=False)
+        data_encoded = encoder.fit_transform(data)
+        return data_encoded
+
+    def split(self, data, target):
+        """
+        #description for this function
+        This function is used to split the data into train and test set.
+        ################################
+        #Parameters
+        data: numpy array
+            The data from the sklearn datasets
+        target: numpy array
+        ###############################
+        #Returns
+        X_train: numpy array
+            The training data
+        X_test: numpy array
+            The testing data
+        y_train: numpy array
+            The training target
+        y_test: numpy array
+            The testing target
+        """
         X_train, X_test, y_train, y_test = train_test_split(
-            fin_df, output, test_size=0.33, random_state=42
+            data, target, test_size=0.33, random_state=42
         )
+        logging.info("Data split into testing and train")
         return X_train, X_test, y_train, y_test

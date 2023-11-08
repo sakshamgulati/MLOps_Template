@@ -1,0 +1,6 @@
+#adding wandb folder
+wandb/
+
+#add .metaflow and .vscode folders
+.metaflow/
+.vscode/

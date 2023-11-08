@@ -1,13 +1,13 @@
 from metaflow import FlowSpec, step
 
-class HelloWorldFlow(FlowSpec):
 
+class HelloWorldFlow(FlowSpec):
     @step
     def start(self):
         """Starting point"""
         print("This is start step")
         self.next(self.hello)
-    
+
     @step
     def hello(self):
         """Just saying hi"""
@@ -19,5 +19,6 @@ class HelloWorldFlow(FlowSpec):
         """Finish line"""
         print("This is end step")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     HelloWorldFlow()
