@@ -1,13 +1,13 @@
-import sys
 import logging
+import os, sys
 
-sys.path.insert(0, "C:/Users/saksh/MLOps_Template")
-from src.ModelOps import ModelFit
-from src.DataOps import feature_engg_class
+# Now you can import your module
+from src.ModelOps.model_fit import ModelFit
+from src.DataOps.feature_engg import feature_engg_class
 
 logging.info("Internal modules loaded")
 
-
+ 
 diabetes = feature_engg_class()
 data, target = diabetes.load_data()
 data = diabetes.standard_scaling(data)

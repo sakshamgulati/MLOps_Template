@@ -56,7 +56,7 @@ class TrainDeployFlow(FlowSpec):
     @step
     def publishing_api(self):
         print("publishing of the results")
-        self.rf_reg.save_model(self.model)
+        self.rf_reg.test_model()
         self.next(self.end)
 
     @step

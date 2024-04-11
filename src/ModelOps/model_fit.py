@@ -44,7 +44,7 @@ class ModelFit:
         wandb.log({"Mean squared error": mse, "Test R-squared": r2})
         return reg
 
-    def save_model(self, reg):
+    def test_model(self):
         """
         #docstring for saving the model
         #This function is used to save the model as a pickle file
@@ -52,19 +52,20 @@ class ModelFit:
         #Output: None
 
         """
-        best_model = wandb.Artifact(f"model_{self.run.id}", type="model")
-
-        # Save model as a pickle file
-        logging.info(f"Save model as a pickle file")
-        with open("artifacts/model1/reg.pkl", "wb") as f:
-            pickle.dump(reg, f)
-        # model uploaded to model registry at weights and biases
-        best_model.add_file("artifacts/model1/reg.pkl")
-        self.run.log_artifact(best_model)
-
-        # Link the model to the Model Registry
-        self.run.link_artifact(best_model, "model-registry/My Registered Model")
-
+        try:    
+            best_model = wandb.Artifact(f"model_{self.run.id}", type="model")
+            print("Artifact created")
+            print(best_model)
+            # best_model.add_dir("artifacts/")
+            # wandb.log_artifact(best_model)
+        except:
+            logging.error("Model not saved to weights and biases")
+            # Save model as a pickle file
         wandb.finish()
+        logging.info("Save model as a pickle file")
+        # with open("artifacts/model1/reg.pkl", "wb") as f:
+        #     pickle.dump(reg, f)
+        # model uploaded to model registry at weights and biases
+        
 
         return None
