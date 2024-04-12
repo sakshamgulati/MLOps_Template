@@ -30,6 +30,8 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Run Metaflow script
+      env:
+        WANDB_API_KEY: ${{ secrets.GITHUB_TOKEN }}
       run: |
         pipenv install metaflow
         pipenv run python deploy.py run

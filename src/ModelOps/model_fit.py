@@ -4,8 +4,9 @@ import wandb
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 import pickle
+import os
 
-
+os.environ["WANDB_API_KEY"] = os.getenv("WANDB_API_KEY")
 class ModelFit:
     """
     #docstring for ModelFit class
