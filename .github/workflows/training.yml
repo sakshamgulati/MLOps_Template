@@ -32,4 +32,4 @@ jobs:
     - name: Run Metaflow script
       run: |
         pipenv install metaflow
-        pipenv run python helloworld.py run
+        pipenv run python deploy.py run
