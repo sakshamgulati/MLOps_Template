@@ -55,8 +55,11 @@ class TrainDeployFlow(FlowSpec):
 
     @step
     def publishing_api(self):
+        import pickle
         print("publishing of the results")
-        self.rf_reg.test_model()
+        # Save pickle file to artifacts folder
+        with open('artifacts/model.pkl', 'wb') as f:
+            pickle.dump(self.model, f)
         self.next(self.end)
 
     @step
