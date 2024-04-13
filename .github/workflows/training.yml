@@ -31,7 +31,8 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Run Metaflow script
       env:
-        WANDB_API_KEY: ${{ secrets.GITHUB_TOKEN }}
+        WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
       run: |
+        echo $WANDB_API_KEY
         pipenv install metaflow
         pipenv run python deploy.py run
