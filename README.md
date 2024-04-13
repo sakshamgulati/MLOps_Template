@@ -9,6 +9,8 @@ This project serves as a comprehensive guide to implementing Continuous Integrat
 
 Should you choose to train a different, improved model, you can utilize the same scripts to train and publish it within the same model repository. However, when transitioning to deploying the model in a production environment, it's essential to pass multiple unit tests and adhere to linting standards, all of which are powered by Pytest.
 
+For more information-https://www.notion.so/Machine-Learning-Ops-3983660707ff41fdaa37717bc8153140?pvs=4
+
 **Motto and inspiration-**
 <br>
 <img width="443" alt="image" src="https://github.com/sakshamgulati/MLOps_Template/assets/16202917/c175e03e-c753-474f-b6a5-17b792b297e2">
