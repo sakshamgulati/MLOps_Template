@@ -15,6 +15,7 @@ class ModelFit:
     """
 
     def __init__(self):
+        logging.info(f"Weights and Biases key:{os.environ['WANDB_API_KEY']}")
         self.run = wandb.init(project="ml-ops-template")
         logging.info(f"Weights and Biases initiated with Run ID: {self.run.id}")
         logging.info(
