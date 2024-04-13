@@ -6,7 +6,6 @@ from sklearn.metrics import mean_squared_error, r2_score
 import pickle
 import os
 
-# os.environ["WANDB_API_KEY"] = os.getenv("WANDB_API_KEY")
 class ModelFit:
     """
     #docstring for ModelFit class
@@ -16,7 +15,8 @@ class ModelFit:
 
     def __init__(self):
         logging.info(f"Weights and Biases key:{os.environ['WANDB_API_KEY']}")
-        os.environ["WANDB_API_KEY"] = "22787bdec6329d031c43de72471e610b908a8815"
+        os.environ["WANDB_API_KEY"] = os.getenv("WANDB_API_KEY")
+        # os.environ["WANDB_API_KEY"] = "22787bdec6329d031c43de72471e610b908a8815"
         # assert os.environ["WANDB_API_KEY_2"]==os.getenv("WANDB_API_KEY"), "Key mismatch"
         self.run = wandb.init(project="ml-ops-template")
         logging.info(f"Weights and Biases initiated with Run ID: {self.run.id}")
