@@ -4,7 +4,8 @@ on:
   workflow_dispatch:
   # pull_request:
   #   types: [closed]
-
+env:
+  WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
 jobs:
   build:
 
@@ -30,9 +31,9 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Run Metaflow script
-      env:
-        WANDB_API_KEY_2: ${{ secrets.WANDB_API_KEY }}
+      
       run: |
         echo ${{secrets.WANDB_API_KEY}} | sed 's/./& /g'
+        echo $WANDB_API_KEY
         pipenv install metaflow
         pipenv run python deploy.py run
