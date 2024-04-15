@@ -33,7 +33,5 @@ jobs:
         WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
       
       run: |
-        echo ${{secrets.WANDB_API_KEY}} | sed 's/./& /g'
-        echo $WANDB_API_KEY
         pipenv install metaflow
         pipenv run python deploy.py run

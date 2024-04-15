@@ -43,14 +43,13 @@ class TrainDeployFlow(FlowSpec):
         )
         self.next(self.ml_flow)
 
-    # @secrets(sources=['WANDB_API_KEY'])
     @environment(vars={'WANDB_API_KEY': os.getenv('WANDB_API_KEY')})
     @step
     def ml_flow(self):
         from src import ModelOps
         import os
         print("the api key is",os.environ['WANDB_API_KEY'])
-        print("Training model")
+        print("Training model") 
         self.rf_reg = ModelOps.ModelFit()
         self.model = self.rf_reg.model(
             self.X_train, self.X_test, self.y_train, self.y_test
