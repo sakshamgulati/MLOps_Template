@@ -1,4 +1,4 @@
-name: Run Metaflow script on approved merge request
+name: Inference
 
 on:
   workflow_dispatch:

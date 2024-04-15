@@ -1,5 +1,4 @@
 import logging
-import os, sys
 
 # Now you can import your module
 from src.ModelOps.model_fit import ModelFit
