@@ -50,7 +50,7 @@ class InferFlow(FlowSpec):
         import os
         print("Load the model, make predictions") 
         self.preds=ModelOps.ModelInference().inference(self.y_test)
-        self.next(self.publishing_api)
+        self.next(self.end)
 
     @step
     def end(self):
