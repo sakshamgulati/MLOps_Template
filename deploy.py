@@ -1,8 +1,7 @@
 # class to write metaflow production steps
-from metaflow import FlowSpec, step, Parameter, IncludeFile,secrets
+from metaflow import FlowSpec, step, Parameter, IncludeFile,secrets, environment
 import os
 
-os.environ["WANDB_API_KEY"] = os.getenv("WANDB_API_KEY")
 
 # @conda_base(python='3.10.1',
 #            packages={'scikit-learn': '1.3.2',
@@ -44,7 +43,8 @@ class TrainDeployFlow(FlowSpec):
         )
         self.next(self.ml_flow)
 
-    @secrets(sources=['WANDB_API_KEY'])
+    # @secrets(sources=['WANDB_API_KEY'])
+    @environment(vars={'WANDB_API_KEY': os.getenv('WANDB_API_KEY')})
     @step
     def ml_flow(self):
         from src import ModelOps

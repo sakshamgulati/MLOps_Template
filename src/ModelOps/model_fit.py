@@ -6,8 +6,6 @@ from sklearn.metrics import mean_squared_error, r2_score
 import pickle
 import os
 
-# os.environ["WANDB_API_KEY"] = os.getenv("WANDB_API_KEY")
-
 class ModelFit:
     """
     #docstring for ModelFit class
@@ -16,13 +14,12 @@ class ModelFit:
     """
 
     def __init__(self):
-        logging.info(f"Weights and Biases key:{os.environ['WANDB_API_KEY']}")
         # os.environ["WANDB_API_KEY"] = "22787bdec6329d031c43de72471e610b908a8815"
         self.run = wandb.init(project="ml-ops-template")
         logging.info(f"Weights and Biases initiated with Run ID: {self.run.id}")
-        # logging.info(
-        #     f"For more information on the experiments visit: https://wandb.ai/sakshamgulati123"
-        # )
+        logging.info(
+            f"For more information on the experiments visit: https://wandb.ai/sakshamgulati123"
+        )
 
     def model(self, X_train, X_test, y_train, y_test):
         """
@@ -35,7 +32,7 @@ class ModelFit:
         reg = RandomForestRegressor().fit(X_train, y_train)
         logging.info("Model Trained")
 
-        # wandb.log({"Train R-squared": reg.score(X_train, y_train)})
+        wandb.log({"Train R-squared": reg.score(X_train, y_train)})
         logging.info(f"R squared logged:{reg.score(X_train, y_train)}")
         y_pred = reg.predict(X_test)
         assert len(y_pred) == len(y_test), "Length mismatch"
@@ -45,7 +42,7 @@ class ModelFit:
         # logging MSE and R2 score
         logging.info(f"MSE:{mse}")
         logging.info(f"R2:{r2}")
-        # wandb.log({"Mean squared error": mse, "Test R-squared": r2})
-        # wandb.finish()
+        wandb.log({"Mean squared error": mse, "Test R-squared": r2})
+        wandb.finish()
         return reg
 
