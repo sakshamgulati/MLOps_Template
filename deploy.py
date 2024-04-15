@@ -48,9 +48,8 @@ class TrainDeployFlow(FlowSpec):
     def ml_flow(self):
         from src import ModelOps
         import os
-        print("the api key is",os.environ['WANDB_API_KEY'])
         print("Training model") 
-        self.rf_reg = ModelOps.ModelFit(os.environ['WANDB_API_KEY'])
+        self.rf_reg = ModelOps.ModelFit()
         self.model = self.rf_reg.model(
             self.X_train, self.X_test, self.y_train, self.y_test
         )
