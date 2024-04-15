@@ -44,6 +44,30 @@ class ModelFit:
         logging.info(f"MSE:{mse}")
         logging.info(f"R2:{r2}")
         wandb.log({"Mean squared error": mse, "Test R-squared": r2})
-        wandb.finish()
+        
         return reg
+
+    def save_model_to_registry(self,model,wandb=True):
+        """
+        #docstring for save_model_to_registry
+        #This function is used to save the model to the registry
+        #Input: None
+        #Output: None
+
+        """
+        INIT_MODEL_DIR='init_model'
+        
+        if wandb:
+            
+            artifact = wandb.Artifact(name="my_models", type="model")
+            model.save(INIT_MODEL_DIR)
+            artifact.add_dir(INIT_MODEL_DIR)
+            self.run.log_artifact(artifact)
+            # artifact.add_dir(local_path="./model.pkl")
+            # self.run.log_artifact(artifact)
+            logging.info("Model saved to weights and biases registry")
+        else:
+            logging.info("Model not saved to weights and biases registry")
+        self.run.finish()
+        return None
 
