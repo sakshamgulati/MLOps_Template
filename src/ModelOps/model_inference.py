@@ -30,8 +30,8 @@ class ModelInference:
         #Output: Model object
 
         """
-        artifact_dir = self.run.use_model(name='sakshamgulati123/ml-ops-template/model_atzgbhx7:v0')
-        # artifact_dir = artifact.download()
+        artifact = self.run.use_artifact('sakshamgulati123/ml-ops-template/model_atzgbhx7:v0', type='model')
+        artifact_dir = artifact.download()
         logging.info(f"Artifact downloaded at: {artifact_dir}")
         logging.info("Model artifact downloaded")
         #load  pickle file
