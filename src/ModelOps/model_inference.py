@@ -35,7 +35,8 @@ class ModelInference:
         logging.info(f"Artifact downloaded at: {artifact_dir}")
         logging.info("Model artifact downloaded")
         #load  pickle file
-        with open(artifact_dir, 'rb') as f:
+        file_path = os.path.join(artifact_dir, 'reg.pkl')  # specify the correct file path
+        with open(file_path, 'rb') as f:
             model = pickle.load(f)
         logging.info("Model loaded from the registry")
         y_pred = model.predict(y_test)
