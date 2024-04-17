@@ -11,8 +11,7 @@ scikit-learn = "*"
 metaflow = "*"
 pytest = "*"
 mlflow = "*"
-wandb = "*"
-
+wandb==0.12.2
 [dev-packages]
 ipykernel = "*"
 
