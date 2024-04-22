@@ -53,15 +53,7 @@ class TrainDeployFlow(FlowSpec):
         self.model = self.rf_reg.model(
             self.X_train, self.X_test, self.y_train, self.y_test
         )
-        self.next(self.publishing_api)
-
-    @step
-    def publishing_api(self):
-        import pickle
-        print("publishing of the results")
-        # Save pickle file to artifacts folder
-        with open('artifacts/model.pkl', 'wb') as f:
-            pickle.dump(self.model, f)
+        self.rf_reg.save_model_to_registry(self.model)
         self.next(self.end)
 
     @step
