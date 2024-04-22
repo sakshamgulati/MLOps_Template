@@ -55,14 +55,15 @@ class ModelFit:
         #Output: None
 
         """
-        INIT_MODEL_DIR='init_model'
-        
+        from pathlib import Path
+        filename = Path("artifacts/model1/model.pickle")
+        # Ensure the directory exists
+        filename.parent.mkdir(parents=True, exist_ok=True)
+        with open(filename, 'wb') as file:
+            pickle.dump(model, file)
         if wandb:
-            
-            artifact = wandb.Artifact(name="my_models", type="model")
-            model.save(INIT_MODEL_DIR)
-            artifact.add_dir(INIT_MODEL_DIR)
-            self.run.log_artifact(artifact)
+            registered_model_name = "Classification-dev"
+            self.run.link_model(path=filename, registered_model_name=registered_model_name)
             logging.info("Model saved to weights and biases registry")
         else:
             logging.info("Model not saved to weights and biases registry")
