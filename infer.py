@@ -47,9 +47,8 @@ class InferFlow(FlowSpec):
     @step
     def infer_flow(self):
         from src import ModelOps
-        import os
         print("Load the model, make predictions") 
-        self.preds=ModelOps.ModelInference().inference(self.y_test)
+        self.preds=ModelOps.ModelInference().inference(self.X_test)
         self.next(self.end)
 
     @step

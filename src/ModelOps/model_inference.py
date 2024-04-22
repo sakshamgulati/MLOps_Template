@@ -22,7 +22,7 @@ class ModelInference:
             f"For more information on the experiments visit: https://wandb.ai/sakshamgulati123"
         )
 
-    def inference(self, y_test):
+    def inference(self, X_test):
         """
         #docstring for model
         #This function is used to train the model and log the metrics to weights and biases
@@ -30,21 +30,16 @@ class ModelInference:
         #Output: Model object
 
         """
-        artifact = self.run.use_artifact('sakshamgulati123/ml-ops-template/model_atzgbhx7:v0', type='model')
+        
+        artifact = self.run.use_artifact('sakshamgulati123/ml-ops-template/run-z2g1z099-model.pickle:v0', type='model')
         artifact_dir = artifact.download()
         logging.info(f"Artifact downloaded at: {artifact_dir}")
         logging.info("Model artifact downloaded")
         #load  pickle file
-        file_path = os.path.join(artifact_dir, 'reg.pkl')  # specify the correct file path
+        file_path = os.path.join(artifact_dir, 'model.pickle')  # specify the correct file path
         with open(file_path, 'rb') as f:
             model = pickle.load(f)
         logging.info("Model loaded from the registry")
-        y_pred = model.predict(y_test)
-        mse = mean_squared_error(y_test, y_pred)
-        r2 = r2_score(y_test, y_pred)
-        # logging MSE and R2 score
-        logging.info(f"MSE:{mse}")
-        logging.info(f"R2:{r2}")
-        wandb.log({"Mean squared error": mse, "Test R-squared": r2})
-        
+        y_pred = model.predict(X_test)
+        self.run.finish()
         return y_pred
