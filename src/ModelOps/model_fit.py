@@ -11,7 +11,6 @@ from pathlib import Path
 
 class ModelFit:
     """
-    #docstring for ModelFit class
     #This class is used to train the model and log the metrics to weights and biases
 
     """
