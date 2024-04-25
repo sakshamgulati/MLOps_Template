@@ -26,11 +26,7 @@ class feature_engg_class:
     None
     """
 
-    def __init__(self, config_file="./conf/smartprice.yaml"):
-        self.logger = logging.getLogger(__name__)
-        self.config = confuse.Configuration("SmartPrice", __name__)
-        self.config.set_file(config_file)
-        self.DRIVER_PATH = self.config["DRIVER_PATH"].get(str)
+    def __init__(self):
         self.diabetes = datasets.load_diabetes()
 
     def load_data(self):

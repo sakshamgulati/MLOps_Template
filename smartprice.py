@@ -16,5 +16,5 @@ logging.info(f"length of the train set:{len(X_train)}")
 # random forest regressor with default parameters
 rf_reg = ModelFit()
 model = rf_reg.model(X_train, X_test, y_train, y_test)
-rf_reg.save_model(model)
+rf_reg.save_model_to_registry(model)
 logging.info("Model Saved")
