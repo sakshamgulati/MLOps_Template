@@ -6,13 +6,21 @@ import os
 
 class InferFlow(FlowSpec):
     """
+    This class is used run inference from a trained model in a model repository.
+    We have used Weights and Biases for tracking the model performance and to save the model in their free registry
+    
+    
     to run this flow in your local development environment, run the following command:
-
+    pip install metaflow
+    python scripts/infer.py run
+    pre-requisites:
+    1. Ensure that WANDB_API_KEY is set in your environment variables
+    
     """
 
     # include the conf/config.yaml file in includefile
     includefile = IncludeFile(
-        "configfile", help="Include the config file", default="conf/smartprice.yaml"
+        "configfile", help="Include the config file", default="conf/mlops.yaml"
     )
 
     @step

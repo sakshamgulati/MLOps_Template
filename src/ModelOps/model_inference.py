@@ -5,7 +5,8 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 import pickle
 import os
-
+import yaml
+import logging
 class ModelInference:
     """
     #docstring for ModelFit class
@@ -14,9 +15,16 @@ class ModelInference:
     """
 
     def __init__(self):
+
+        # Open and read the YAML file
+        with open('conf/mlops.yaml', 'r') as file:
+            config = yaml.safe_load(file)
+        self.model_name = config['model_name']
+        self.project_name=config['project_name']
+        self.model_type=config['model_type']
+        
         os.environ["WANDB_API_KEY"] = "22787bdec6329d031c43de72471e610b908a8815"
-        # os.environ["WANDB_API_KEY"]  = os.getenv('WANDB_API_KEY')
-        self.run = wandb.init(project="ml-ops-template",job_type="inference")
+        self.run = wandb.init(project=self.model_name,job_type=self.model_type)
         logging.info(f"Weights and Biases initiated with Run ID: {self.run.id}")
         logging.info(
             f"For more information on the experiments visit: https://wandb.ai/sakshamgulati123"

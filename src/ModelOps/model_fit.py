@@ -5,6 +5,9 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 import pickle
 import os
+import yaml
+from pathlib import Path
+
 
 class ModelFit:
     """
@@ -14,9 +17,15 @@ class ModelFit:
     """
 
     def __init__(self):
+        with open('conf/mlops.yaml', 'r') as file:
+            config = yaml.safe_load(file)
+        self.model_name = config['model_name']
+        self.project_name=config['project_name']
+        self.model_type=config['model_type']
+        self.model_path=config['saved_model_path']
+        
         os.environ["WANDB_API_KEY"] = "22787bdec6329d031c43de72471e610b908a8815"
-        # os.environ["WANDB_API_KEY"]  = os.getenv('WANDB_API_KEY')
-        self.run = wandb.init(project="ml-ops-template")
+        self.run = wandb.init(project=self.model_name)
         logging.info(f"Weights and Biases initiated with Run ID: {self.run.id}")
         logging.info(
             f"For more information on the experiments visit: https://wandb.ai/sakshamgulati123"
@@ -55,14 +64,13 @@ class ModelFit:
         #Output: None
 
         """
-        from pathlib import Path
-        filename = Path("artifacts/model1/model.pickle")
+        filename = Path(self.model_path)
         # Ensure the directory exists
         filename.parent.mkdir(parents=True, exist_ok=True)
         with open(filename, 'wb') as file:
             pickle.dump(model, file)
         if wandb:
-            registered_model_name = "Classification-dev"
+            registered_model_name = self.model_name
             self.run.link_model(path=filename, registered_model_name=registered_model_name)
             logging.info("Model saved to weights and biases registry")
         else:

@@ -36,11 +36,11 @@ class feature_engg_class:
     def load_data(self):
         """
         #description for this function
-        This function is used to load the data from the sklearn datasets.
-        ################################
+        This function is used to load the data from the sklearn datasets. \n
+        ################################ \n
         #Parameters
-        None
-        ################################
+            None \n
+        ################################ \n
         #Returns
         data: numpy array
             The data from the sklearn datasets
@@ -57,12 +57,12 @@ class feature_engg_class:
     def standard_scaling(self, data):
         """
         #description for this function
-        This function is used to scale the data using StandardScaler.
-        ################################
+        This function is used to scale the data using StandardScaler. \n
+        ################################ \n
         #Parameters
         data: numpy array
             The data from the sklearn datasets
-        ################################
+        ################################ \n
         #Returns
         data_scaled: numpy array
             The scaled data

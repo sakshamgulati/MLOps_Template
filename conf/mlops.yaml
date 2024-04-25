@@ -1,0 +1,4 @@
+model_name : "ml-ops-template"
+project_name: "ml-ops-template"
+model_type: "classification"
+saved_model_path: "artifacts/model1/model.pickle"
