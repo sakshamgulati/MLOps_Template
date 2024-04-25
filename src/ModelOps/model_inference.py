@@ -22,6 +22,7 @@ class ModelInference:
         self.model_name = config['model_name']
         self.project_name=config['project_name']
         self.model_type=config['model_type']
+        self.wandb_entity=config['wandb_entity']
         
         os.environ["WANDB_API_KEY"] = "22787bdec6329d031c43de72471e610b908a8815"
         self.run = wandb.init(project=self.model_name,job_type=self.model_type)
@@ -39,7 +40,7 @@ class ModelInference:
 
         """
         
-        artifact = self.run.use_artifact('sakshamgulati123/ml-ops-template/run-z2g1z099-model.pickle:v0', type='model')
+        artifact = self.run.use_artifact(f'{self.wandb_entity}/model-registry/{self.model_name}:latest', type='model')
         artifact_dir = artifact.download()
         logging.info(f"Artifact downloaded at: {artifact_dir}")
         logging.info("Model artifact downloaded")
