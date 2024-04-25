@@ -1,4 +1,5 @@
-model_name : "ml-ops-template"
+model_name : "diabetes_model"
 project_name: "ml-ops-template"
 model_type: "classification"
 saved_model_path: "artifacts/model1/model.pickle"
+wandb_entity: "sakshamgulati123" #replace with your own weights and bias username username
