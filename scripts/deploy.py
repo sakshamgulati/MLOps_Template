@@ -17,7 +17,7 @@ class TrainDeployFlow(FlowSpec):
 
     # include the conf/config.yaml file in includefile
     includefile = IncludeFile(
-        "configfile", help="Include the config file", default="conf/smartprice.yaml"
+        "configfile", help="Include the config file", default="conf/mlops.yaml"
     )
 
     @step
