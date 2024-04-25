@@ -4,3 +4,12 @@ wandb/
 #add .metaflow and .vscode folders
 .metaflow/
 .vscode/
+
+#wandb folder
+wandb/
+
+#add artifacts folder
+artifacts/
+
+#add __pycache__ folder
+__pycache__/

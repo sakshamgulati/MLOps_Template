@@ -34,4 +34,4 @@ jobs:
       
       run: |
         pipenv install metaflow
-        pipenv run python deploy.py run
+        pipenv run python scripts/deploy.py run

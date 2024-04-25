@@ -34,4 +34,4 @@ jobs:
       
       run: |
         pipenv install metaflow
-        pipenv run python infer.py run
+        pipenv run python scripts/infer.py run

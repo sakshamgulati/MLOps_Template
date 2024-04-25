@@ -13,6 +13,8 @@ pytest = "*"
 mlflow = "*"
 wandb = "*"
 protobuf = "*"
+kubernetes = "*"
+
 [dev-packages]
 ipykernel = "*"
 

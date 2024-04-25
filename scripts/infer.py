@@ -3,12 +3,7 @@ from metaflow import FlowSpec, step, IncludeFile, environment
 import os
 
 
-# @conda_base(python='3.10.1',
-#            packages={'scikit-learn': '1.3.2',
-#                      'pandas': '2.1.2',
-#                      'numpy': '1.26.1',
-#                      'python-dotenv': '0.21.1',
-#  'confuse':'2.0.1'})
+
 class InferFlow(FlowSpec):
     """
     to run this flow in your local development environment, run the following command:
