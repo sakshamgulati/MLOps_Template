@@ -17,7 +17,7 @@ class ModelInference:
     def __init__(self):
 
         # Open and read the YAML file
-        with open('mlops.yaml', 'r') as file:
+        with open('conf/mlops.yaml', 'r') as file:
             config = yaml.safe_load(file)
         self.model_name = config['model_name']
         self.project_name=config['project_name']
