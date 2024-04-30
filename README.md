@@ -12,7 +12,7 @@ Should you choose to train a different, improved model, you can utilize the same
 For more information-https://www.notion.so/Machine-Learning-Ops-3983660707ff41fdaa37717bc8153140?pvs=4
 
 **Next Steps**
-1. Replacing Diabetes with Time-Series Model ensuring model retraining capability
+1. Replacing Diabetes Classification with Time-Series Model ensuring model retraining capability
 2. Incorporating Model Retraining and model replacing with CICD
 3. Capturing Model/Feature Drift using Evidently AI
 4. Shifting Model to AWS
