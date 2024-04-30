@@ -37,8 +37,6 @@ class TrainDeployFlow(FlowSpec):
     @step
     def data_process_flow(self):
         print("Processing data")
-        secret_value = os.getenv('WANDB_API_KEY')
-        print("Secret Value:", secret_value)
         self.fin_df = self.diabetes.standard_scaling(self.data)
         self.X_train, self.X_test, self.y_train, self.y_test = self.diabetes.split(
             self.fin_df, self.target
@@ -52,8 +50,6 @@ class TrainDeployFlow(FlowSpec):
         import wandb
         print("Training model")
         os.environ["WANDB_API_KEY"] = os.getenv('WANDB_API_KEY') 
-        run = wandb.init(project="testing api")
-        run.finish()
         self.rf_reg = ModelOps.ModelFit()
         self.model = self.rf_reg.model(
             self.X_train, self.X_test, self.y_train, self.y_test
