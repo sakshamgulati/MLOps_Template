@@ -1,14 +1,7 @@
 # class to write metaflow production steps
-from metaflow import FlowSpec, step, Parameter, IncludeFile,secrets, environment
+from metaflow import FlowSpec, step, Parameter, IncludeFile, environment
 import os
 
-
-# @conda_base(python='3.10.1',
-#            packages={'scikit-learn': '1.3.2',
-#                      'pandas': '2.1.2',
-#                      'numpy': '1.26.1',
-#                      'python-dotenv': '0.21.1',
-#  'confuse':'2.0.1'})
 class TrainDeployFlow(FlowSpec):
     """
     to run this flow in your local development environment, run the following command:
