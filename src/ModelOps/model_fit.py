@@ -23,7 +23,6 @@ class ModelFit:
         self.model_type=config['model_type']
         self.model_path=config['saved_model_path']
         
-        # os.environ["WANDB_API_KEY"] = "22787bdec6329d031c43de72471e610b908a8815"
         self.run = wandb.init(project=self.model_name)
         logging.info(f"Weights and Biases initiated with Run ID: {self.run.id}")
         logging.info(
