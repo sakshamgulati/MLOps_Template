@@ -30,8 +30,10 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Run Metaflow script
       env:
-        WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
-        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+        # WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
+        WANDB_API_KEY: 22787bdec6329d031c43de72471e610b908a8815
+        #load an envorinment variable from a file
+
       
       run: |
         pipenv install metaflow

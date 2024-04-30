@@ -37,7 +37,7 @@ class TrainDeployFlow(FlowSpec):
     @step
     def data_process_flow(self):
         print("Processing data")
-        secret_value = os.getenv('DATABASE_PASSWORD')
+        secret_value = os.getenv('WANDB_API_KEY')
         print("Secret Value:", secret_value)
         self.fin_df = self.diabetes.standard_scaling(self.data)
         self.X_train, self.X_test, self.y_train, self.y_test = self.diabetes.split(
