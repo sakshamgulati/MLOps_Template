@@ -24,7 +24,6 @@ class ModelInference:
         self.model_type=config['model_type']
         self.wandb_entity=config['wandb_entity']
         
-        os.environ["WANDB_API_KEY"] = "22787bdec6329d031c43de72471e610b908a8815"
         self.run = wandb.init(project=self.model_name,job_type=self.model_type)
         logging.info(f"Weights and Biases initiated with Run ID: {self.run.id}")
         logging.info(
