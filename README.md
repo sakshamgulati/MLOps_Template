@@ -12,9 +12,12 @@ Should you choose to train a different, improved model, you can utilize the same
 For more information-https://www.notion.so/Machine-Learning-Ops-3983660707ff41fdaa37717bc8153140?pvs=4
 
 **Next Steps**
-1. Incorporating  
-2.
-3.
+1. Replacing Diabetes with Time-Series Model ensuring model retraining capability
+2. Incorporating Model Retraining and model replacing with CICD
+3. Capturing Model/Feature Drift using Evidently AI
+4. Shifting Model to AWS
+5. Dockerization and shifting model to K8s
+
 **Inspiration-**
 <br>Idea inspired by <a href='https://github.com/simonprudhomme'> Simon </a>
 <img width="443" alt="image" src="https://github.com/sakshamgulati/MLOps_Template/assets/16202917/c175e03e-c753-474f-b6a5-17b792b297e2">
