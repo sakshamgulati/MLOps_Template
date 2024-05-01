@@ -13,3 +13,5 @@ artifacts/
 
 #add __pycache__ folder
 __pycache__/
+#add .env file
+.env
