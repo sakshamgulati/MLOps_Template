@@ -19,6 +19,12 @@ For further details, visit [here](https://www.notion.so/Machine-Learning-Ops-398
 4. Shift Model to AWS.
 5. Dockerization and shift model to K8s.
 
+**To Do:**
+- [ ] add setup instructions in the README.md
+- [ ] add Metaflow setup instructions in the README.md 
+- [ ] Delete unnecessary files and folders in the repository
+- [ ] Add linter, unit tests, formatting (ex, black) in the CI/CD pipeline
+
 **Inspiration:**  
 Idea inspired by [Simon](https://github.com/simonprudhomme)
 ![MLOps's Image](https://github.com/sakshamgulati/MLOps_Template/assets/16202917/c175e03e-c753-474f-b6a5-17b792b297e2)
