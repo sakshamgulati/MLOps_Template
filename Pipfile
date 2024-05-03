@@ -13,6 +13,8 @@ pytest = "==8.1.1"
 wandb = "==0.16.6"
 protobuf = "==4.25.3"
 kubernetes = "==29.0.0"
+alpha-vantage = "*"
+tqdm = "*"
 
 [dev-packages]
 ipykernel = "==6.29.4"
