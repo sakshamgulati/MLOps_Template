@@ -8,9 +8,10 @@ import wandb
 from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder
-
+import requests
+from tqdm import tqdm
 logging.basicConfig(level=logging.INFO)
-
+import os
 
 class feature_engg_class:
     """
@@ -27,70 +28,19 @@ class feature_engg_class:
     """
 
     def __init__(self):
-        self.diabetes = datasets.load_diabetes()
+        from dotenv import load_dotenv
+        load_dotenv()
+        ALPHA_VANTAGE_API_KEY=os.getenv("ALPHA_VANTAGE_API_KEY")
+        self.data =self.__request_stock_price_hist('IBM', ALPHA_VANTAGE_API_KEY)
+        logging.info("Data loaded successfully")
+        logging.info("Data shape: {}".format(self.data.shape))
+        logging.info(f"Earliest Date:{self.data.index[-1]},Latest Date:{self.data.index[-1]}")
 
-    def load_data(self):
+
+    def split(self, use_prophet=True):
         """
         #description for this function
-        This function is used to load the data from the sklearn datasets. \n
-        ################################ \n
-        #Parameters
-            None \n
-        ################################ \n
-        #Returns
-        data: numpy array
-            The data from the sklearn datasets
-        target: numpy array
-        """
-        data = self.diabetes.data
-        target = self.diabetes.target
-        logging.info("Data loaded from sklearn datasets")
-        imputer = SimpleImputer(missing_values=np.nan, strategy="mean")
-        data_imputed = imputer.fit_transform(data)
-        logging.info("Data imputed for missing values")
-        return data_imputed, target
-
-    def standard_scaling(self, data):
-        """
-        #description for this function
-        This function is used to scale the data using StandardScaler. \n
-        ################################ \n
-        #Parameters
-        data: numpy array
-            The data from the sklearn datasets
-        ################################ \n
-        #Returns
-        data_scaled: numpy array
-            The scaled data
-
-        """
-        scaler = StandardScaler()
-        data_scaled = scaler.fit_transform(data)
-        logging.info("Data Scaled")
-        return data_scaled
-
-    def one_hot_encode(self, data):
-        """
-        #description for this function
-        This function is used to one hot encode the data.
-        ################################
-        #Parameters
-        data: numpy array
-            The data from the sklearn datasets
-        ################################
-        #Returns
-        data_encoded: numpy array
-            The one hot encoded data
-
-        """
-        encoder = OneHotEncoder(sparse=False)
-        data_encoded = encoder.fit_transform(data)
-        return data_encoded
-
-    def split(self, data, target):
-        """
-        #description for this function
-        This function is used to split the data into train and test set.
+        This function is used to split the data into train and test set on 70-30 split.
         ################################
         #Parameters
         data: numpy array
@@ -107,8 +57,42 @@ class feature_engg_class:
         y_test: numpy array
             The testing target
         """
-        X_train, X_test, y_train, y_test = train_test_split(
-            data, target, test_size=0.33, random_state=42
-        )
-        logging.info("Data split into testing and train")
-        return X_train, X_test, y_train, y_test
+        if use_prophet:
+            self.data=self.data[['date','close']]
+            self.data.columns = ['ds','y']
+            logging.info("Data prepared for Prophet")
+        
+        train=self.data[:int(0.7*self.data.shape[0])]
+        test=self.data[int(0.7*self.data.shape[0]):]
+        logging.info("Data split into train and test successfully")
+        logging.info(f"Train shape: {train.shape[0]}")
+        logging.info(f"Test shape: {test.shape[0]}")
+        return train, test
+    
+    def __request_stock_price_hist(symbol, token, sample = False):
+            if sample == False:
+                q_string = 'https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol={}&outputsize=full&apikey={}'
+            else:
+                q_string = 'https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol={}&apikey={}'
+
+            logging.info("Retrieving stock price data from Alpha Vantage (This may take a while)...")
+            r = requests.get(q_string.format(symbol, token))
+            logging.info("Data has been successfully downloaded...")
+            date = []
+            colnames = list(range(0, 6))
+            df = pd.DataFrame(columns = colnames)
+            logging.info("Storing the retrieved data into a dataframe...")
+            for i in tqdm(r.json()['Weekly Adjusted Time Series'].keys()):
+                date.append(i)
+                row = pd.DataFrame.from_dict(r.json()['Weekly Adjusted Time Series'][i], orient='index').reset_index().T[1:]
+                df = pd.concat([df, row], ignore_index=True)
+            df.columns = ["open", "high", "low", "close", "adjusted close", "volume", "dividend amount"]
+            df['date'] = date
+            df['date'] = pd.to_datetime(df['date'])
+            df = df.set_index('date')
+            df = df.sort_index(ascending=True)
+            #change the data types of the columns
+            df = df.apply(pd.to_numeric, errors='coerce')
+            logging.info("Sorting the index and changing column data types...")
+
+            return df
