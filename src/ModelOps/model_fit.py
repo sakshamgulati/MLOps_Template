@@ -9,6 +9,9 @@ import yaml
 from pathlib import Path
 from prophet import Prophet
 from prophet.serialize import model_to_json
+import pandas as pd
+import numpy as np
+
 
 class ModelFit:
     """
@@ -40,25 +43,16 @@ class ModelFit:
         """
         model = Prophet()
         model.add_country_holidays(country_name='US')
-        model.fit()
-        close_prices = model.make_future_dataframe(periods=len(test)+len(train))
+        model.fit(train)
+        close_prices = model.make_future_dataframe(periods=30)
         forecast = model.predict(close_prices)
         forecast=forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']]
-        return forecast
-        # wandb.log({"Train R-squared": reg.score(X_train, y_train)})
-        # logging.info(f"R squared logged:{reg.score(X_train, y_train)}")
-        # y_pred = reg.predict(X_test)
-        # assert len(y_pred) == len(y_test), "Length mismatch"
-
-        # mse = mean_squared_error(y_test, y_pred)
-        # r2 = r2_score(y_test, y_pred)
-        # # logging MSE and R2 score
-        # logging.info(f"MSE:{mse}")
-        # logging.info(f"R2:{r2}")
-        # wandb.log({"Mean squared error": mse, "Test R-squared": r2})
-        
-        # return reg
-
+        merged_df=pd.merge(test, forecast, on='ds', how='inner')
+        rms=np.sqrt(np.mean(np.power((np.array(merged_df['y'])-np.array(merged_df['yhat_upper'])),2)))
+        logging.info(f"RMS:{rms}")
+        wandb.log({"Root Mean squared error": rms})
+        return model,forecast
+    
     def save_model_to_registry(self,model,wandb=True):
         """
         #docstring for save_model_to_registry
