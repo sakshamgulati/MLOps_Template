@@ -36,7 +36,6 @@ class ModelInference:
         #This function is used to train the model and log the metrics to weights and biases
         #Input: X_train, X_test, y_train, y_test
         #Output: Model object
-
         """
         
         artifact = self.run.use_artifact(f'{self.wandb_entity}/model-registry/{self.model_name}:latest', type='model')

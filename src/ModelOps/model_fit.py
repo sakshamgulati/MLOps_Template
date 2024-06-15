@@ -33,6 +33,31 @@ class ModelFit:
             f"For more information on the experiments visit: https://wandb.ai/sakshamgulati123"
         )
 
+    def save_reference_data(self,train):
+        '''
+        This function is used to save the reference data to the weights and biases
+        for data monitoring
+        '''
+        #create an artifact object for the reference data
+        processed_data = wandb.Artifact(
+            "reference-dataset", type="dataset",
+            description="Preprocessed training dataset"
+            )
+        #create a sample from the training data
+        ref_dataset=train.sample(1000,replace=True)
+        os.makedirs("artifacts/reference_data",exist_ok=True)
+        ref_dataset.to_csv('artifacts/reference_data/output.csv',index=False)
+        
+        #point the artifact to the local path
+        processed_data.add_file(local_path='artifacts/reference_data/output.csv')
+
+        #log the data to weights and biases
+        self.run.log_artifact(artifact_or_path = processed_data, name = "refrence_data", type = "dataset")
+
+        #point to the reference data
+        logging.info("Reference data saved to weights and biases")
+        
+        return None
     def model(self, train, test):
         """
         #docstring for model

@@ -33,17 +33,18 @@ class TrainDeployFlow(FlowSpec):
     def data_process_flow(self):
         print("Processing data")
         self.train,self.test=self.stock_data.split(use_prophet=True)
-
+        print("Data split successfully")
         self.next(self.ml_flow)
 
     @environment(vars={'WANDB_API_KEY': os.getenv('WANDB_API_KEY')})
     @step
     def ml_flow(self):
         from src import ModelOps
-        import wandb
         print("Training model")
         os.environ["WANDB_API_KEY"] = os.getenv('WANDB_API_KEY') 
         self.model=ModelOps.ModelFit()
+        #saving reference data for monitoring
+        self.model.save_reference_data(self.train)
         self.fitted_model,self.forecast=self.model.model(self.train, self.test)
 
         self.model.save_model_to_registry(self.fitted_model)
