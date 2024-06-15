@@ -15,7 +15,8 @@ protobuf = "==4.25.3"
 kubernetes = "==29.0.0"
 alpha-vantage = "*"
 tqdm = "*"
-evidently = "*"
+evidently = "==0.4.25"
+prophet = "==1.1.5"
 
 [dev-packages]
 ipykernel = "==6.29.4"

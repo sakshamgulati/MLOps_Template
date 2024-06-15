@@ -44,7 +44,8 @@ class ModelFit:
             description="Preprocessed training dataset"
             )
         #create a sample from the training data
-        ref_dataset=train.sample(1000,replace=True)
+        PERCENTAGE=0.2
+        ref_dataset=train.sample(PERCENTAGE*train.shape[0],replace=True)
         os.makedirs("artifacts/reference_data",exist_ok=True)
         ref_dataset.to_csv('artifacts/reference_data/output.csv',index=False)
         
