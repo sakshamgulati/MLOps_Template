@@ -1,4 +1,4 @@
-model_name : "diabetes_model"
+model_name : "stock_price_prediction"
 project_name: "ml-ops-template"
 model_type: "classification"
 saved_model_path: "artifacts/model1/model.pickle"

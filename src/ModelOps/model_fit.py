@@ -57,7 +57,7 @@ class ModelFit:
         #point to the reference data
         logging.info("Reference data saved to weights and biases")
         
-        return None
+        
     def model(self, train, test):
         """
         #docstring for model
