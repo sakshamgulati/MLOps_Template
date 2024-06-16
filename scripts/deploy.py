@@ -36,13 +36,16 @@ class TrainDeployFlow(FlowSpec):
         print("Data split successfully")
         self.next(self.ml_flow)
 
-    @environment(vars={'WANDB_API_KEY': os.getenv('WANDB_API_KEY')})
+    @environment(vars={'WANDB_API_KEY': os.getenv('WANDB_API_KEY'),
+                       'EVI_API': os.getenv('EVI_API'),
+                       'FOO':'BAR'})
     @step
     def ml_flow(self):
         from src import ModelOps
         print("Training model")
+        print(os.environ('FOO'))
         os.environ["WANDB_API_KEY"] = os.getenv('WANDB_API_KEY')
-        os.environ["evi_api"] = os.getenv('EVI_API')  
+        os.environ["EVI_API"] = os.getenv('EVI_API')  
         self.model=ModelOps.ModelFit()
         #saving reference data for monitoring
         self.model.save_reference_data(self.train)
