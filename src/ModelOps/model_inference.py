@@ -78,6 +78,15 @@ class ModelInference:
             RegressionPreset(),
         ])
         # get the reference dataset
+        #create a mock data
+        import pandas as pd
+        import numpy as np
+        np.random.seed(42)
+        reference = pd.DataFrame(data = {
+            'ds': pd.date_range(start='1/1/2020', periods=100, freq='D'),
+            'y': np.random.normal(0, 1, 100),
+            'prediction': np.random.normal(0, 1, 100)
+        })
         regression_performance_report.run(reference_data=None, current_data=reference,
                                         column_mapping=column_mapping)
         regression_performance_report
