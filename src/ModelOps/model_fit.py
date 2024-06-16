@@ -11,7 +11,9 @@ from prophet import Prophet
 from prophet.serialize import model_to_json
 import pandas as pd
 import numpy as np
-
+from evidently.report import Report
+from evidently.metric_preset import DataQualityPreset
+from evidently.ui.workspace.cloud import CloudWorkspace
 
 class ModelFit:
     """
@@ -26,6 +28,8 @@ class ModelFit:
         self.project_name=config['project_name']
         self.model_type=config['model_type']
         self.model_path=config['saved_model_path']
+        self.evidently_team_id=config['evidently_team_id']
+        self.project_description=config['project_description']
         
         self.run = wandb.init(project=self.model_name)
         logging.info(f"Weights and Biases initiated with Run ID: {self.run.id}")
@@ -44,8 +48,8 @@ class ModelFit:
             description="Preprocessed training dataset"
             )
         #create a sample from the training data
-        PERCENTAGE=0.2
-        ref_dataset=train.sample(int(PERCENTAGE*train.shape[0]),replace=True)
+        SAMPLE_RATIO=0.7
+        ref_dataset=train.sample(int(SAMPLE_RATIO*train.shape[0]),replace=True)
         os.makedirs("artifacts/reference_data",exist_ok=True)
         ref_dataset.to_csv('artifacts/reference_data/output.csv',index=False)
         
@@ -57,7 +61,32 @@ class ModelFit:
 
         #point to the reference data
         logging.info("Reference data saved to weights and biases")
-        
+        return ref_dataset
+    
+    def data_quality_check(self,train):
+        """
+        #docstring for data_quality_check
+        #This function is used to check the quality of the data
+        #Input: train data
+        #Output: None
+
+        """
+        ws = CloudWorkspace(
+        token=os.getenv('evi_api'),
+        url="https://app.evidently.cloud")
+        project = ws.create_project(self.project_name,team_id=self.evidently_team_id)
+        project.description = self.project_description
+        #check for missing values
+        data_report = Report(
+        metrics=[
+           DataQualityPreset(),
+        ],
+        )
+        data_report.run(reference_data=None, current_data=train)
+        os.makedirs("artifacts/data_quality",exist_ok=True)
+        report=data_report.save_json("artifacts/data_quality/training_data_quality.json")
+        ws.add_report(project.id, data_report)
+        return report
         
     def model(self, train, test):
         """

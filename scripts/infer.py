@@ -56,6 +56,12 @@ class InferFlow(FlowSpec):
         self.next(self.end)
 
     @step
+    def monitoring_flow(self):
+        print("Monitoring the model performance")
+        
+        self.next(self.end)
+        
+    @step
     def end(self):
         print("End of the flow")
 
