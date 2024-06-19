@@ -52,7 +52,24 @@ class ModelInference:
         y_pred = model.predict(X_test)
         return y_pred
     
-    def monitoring(self):
+    def reference_data_download(self):
+        """
+        #docstring for model
+        #This function is used to download the refernece data from the weights and biases
+        #Input: X_train, X_test, y_train, y_test
+        #Output: Model object
+        """
+        try:
+            ref_dataset = self.run.use_artifact(f'{self.wandb_entity}/{self.model_name}/reference-dataset:latest', type='dataset')
+            ref_dataset_dir = ref_dataset.download()
+            logging.info(f"Artifact downloaded at: {ref_dataset_dir}")
+            logging.info("Model artifact downloaded")
+            return ref_dataset_dir
+        except:
+            logging.error("Reference dataset not found")
+            return None
+        
+    def model_monitoring(self,reference_data,test):
         """
         #docstring for model
         #This function is used to train the model and log the metrics to weights and biases
@@ -63,6 +80,11 @@ class ModelInference:
         from evidently.metric_preset import DataDriftPreset, RegressionPreset
         from evidently.pipeline.column_mapping import ColumnMapping
         from evidently.report import Report
+        from evidently.ui.workspace.cloud import CloudWorkspace
+
+        ws = CloudWorkspace(
+        token=os.getenv('EVI_API'),
+        url="https://app.evidently.cloud")
         target = 'y'
         prediction = 'prediction'
         # numerical_features = ['open', 'high', 'low', 'adjusted close', 'volume', 'dividend amount']
@@ -80,19 +102,12 @@ class ModelInference:
             RegressionPreset(),
         ])
         # get the reference dataset
-        #create a mock data
-        import pandas as pd
-        import numpy as np
-        np.random.seed(42)
-        reference = pd.DataFrame(data = {
-            'ds': pd.date_range(start='1/1/2020', periods=100, freq='D'),
-            'y': np.random.normal(0, 1, 100),
-            'prediction': np.random.normal(0, 1, 100)
-        })
-        regression_performance_report.run(reference_data=None, current_data=reference,
+        
+        regression_performance_report.run(reference_data=reference_data, current_data=test,
                                         column_mapping=column_mapping)
-        regression_performance_report
-        logging.info("Model performance monitored")
+        os.makedirs("artifacts/model_quality",exist_ok=True)
+        regression_performance_report.save("artifacts/model_quality/regression_performance_report.json")
+        ws.add_report(self.project.id, regression_performance_report)
         self.run.finish()
         
         return None
