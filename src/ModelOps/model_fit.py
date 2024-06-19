@@ -72,7 +72,7 @@ class ModelFit:
 
         """
         ws = CloudWorkspace(
-        token=os.getenv('evi_api'),
+        token=os.getenv('EVI_API'),
         url="https://app.evidently.cloud")
         project = ws.create_project(self.project_name,team_id=self.evidently_team_id)
         project.description = self.project_description

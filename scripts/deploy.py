@@ -37,8 +37,8 @@ class TrainDeployFlow(FlowSpec):
         self.next(self.ml_flow)
 
     @environment(vars={'WANDB_API_KEY': os.getenv('WANDB_API_KEY'),
-                       'EVI_API': os.getenv('EVI_API'),
-                       'FOO':'BAR'})
+                       'EVI_API': os.getenv('EVI_API')
+                       })
     @step
     def ml_flow(self):
         from src import ModelOps
@@ -49,6 +49,8 @@ class TrainDeployFlow(FlowSpec):
         self.model=ModelOps.ModelFit()
         #saving reference data for monitoring
         self.model.save_reference_data(self.train)
+        #returns a report that can be used to monitor the data quality
+        self.model.data_quality_check(self.train)
         self.fitted_model,self.forecast=self.model.model(self.train, self.test)
 
         self.model.save_model_to_registry(self.fitted_model)
