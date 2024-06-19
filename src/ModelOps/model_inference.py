@@ -7,6 +7,8 @@ import pickle
 import os
 import yaml
 import logging
+from prophet.serialize import  model_from_json
+
 class ModelInference:
     """
     #docstring for ModelFit class
@@ -43,9 +45,9 @@ class ModelInference:
         logging.info(f"Artifact downloaded at: {artifact_dir}")
         logging.info("Model artifact downloaded")
         #load  pickle file
-        file_path = os.path.join(artifact_dir, 'model.pickle')  # specify the correct file path
-        with open(file_path, 'rb') as f:
-            model = pickle.load(f)
+        file_path = os.path.join(artifact_dir, 'serialized_model.json')  # specify the correct file path
+        with open(file_path, 'r') as fin:
+            model = model_from_json(fin.read())  # Load model
         logging.info("Model loaded from the registry")
         y_pred = model.predict(X_test)
         return y_pred
