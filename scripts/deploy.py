@@ -43,9 +43,12 @@ class TrainDeployFlow(FlowSpec):
     def ml_flow(self):
         from src import ModelOps
         print("Training model")
-        print(os.getenv('FOO'))
         os.environ["WANDB_API_KEY"] = os.getenv('WANDB_API_KEY')
-        os.environ["EVI_API"] = os.getenv('EVI_API')  
+        os.environ["EVI_API"] = os.getenv('EVI_API')
+        #if os.getenv('EVI_API') is None: raise ValueError("EVI_API is not set")
+        if os.getenv('WANDB_API_KEY') is None: raise ValueError("WANDB_API_KEY is not set")
+        if os.getenv('EVI_API') is None: raise ValueError("EVI_API is not set")
+          
         self.model=ModelOps.ModelFit()
         #saving reference data for monitoring
         self.model.save_reference_data(self.train)

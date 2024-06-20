@@ -1,4 +1,4 @@
-name: Training
+name: testing_creds
 
 on:
   workflow_dispatch:
@@ -32,8 +32,7 @@ jobs:
       env:
         WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
         EVI_API: ${{ secrets.EVI_API }}
-
       
       run: |
-        pipenv install metaflow
-        pipenv run python scripts/deploy.py run
+        pipenv install evidently
+        pipenv run python scripts/test_api.py run
