@@ -59,8 +59,12 @@ class InferFlow(FlowSpec):
 
     @step
     def monitoring_flow(self):
+        from src import ModelOps
+        os.environ["EVI_API"] = os.getenv('EVI_API') 
+        inference=ModelOps.ModelInference()
         print("Monitoring the model performance")
-        
+        ref_dataset_dir=inference.reference_data_download()
+        inference.model_monitoring(ref_dataset_dir,self.preds)
         self.next(self.end)
         
     @step

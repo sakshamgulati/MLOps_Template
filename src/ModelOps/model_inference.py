@@ -3,7 +3,7 @@ from sklearn.linear_model import LinearRegression
 import wandb
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
-import pickle
+import pandas as pd
 import os
 import yaml
 import logging
@@ -69,15 +69,14 @@ class ModelInference:
             logging.error("Reference dataset not found")
             return None
         
-    def model_monitoring(self,reference_data,test):
+    def model_monitoring(self,ref_dataset_dir,preds):
         """
         #docstring for model
         #This function is used to train the model and log the metrics to weights and biases
         #Input: X_train, X_test, y_train, y_test
         #Output: Model object
         """
-        from evidently.metrics import RegressionQualityMetric, RegressionErrorPlot, RegressionErrorDistribution
-        from evidently.metric_preset import DataDriftPreset, RegressionPreset
+        from evidently.metric_preset import RegressionPreset
         from evidently.pipeline.column_mapping import ColumnMapping
         from evidently.report import Report
         from evidently.ui.workspace.cloud import CloudWorkspace
@@ -87,8 +86,6 @@ class ModelInference:
         url="https://app.evidently.cloud")
         target = 'y'
         prediction = 'prediction'
-        # numerical_features = ['open', 'high', 'low', 'adjusted close', 'volume', 'dividend amount']
-        # categorical_features = ['season', 'holiday', 'workingday', ]#'weathersit']
 
         column_mapping = ColumnMapping()
 
@@ -102,11 +99,12 @@ class ModelInference:
             RegressionPreset(),
         ])
         # get the reference dataset
-        
-        regression_performance_report.run(reference_data=reference_data, current_data=test,
+        reference_data = pd.read_csv(os.path.join(ref_dataset_dir,"reference_data.csv"))
+        regression_performance_report.run(reference_data=reference_data, current_data=preds,
                                         column_mapping=column_mapping)
         os.makedirs("artifacts/model_quality",exist_ok=True)
         regression_performance_report.save("artifacts/model_quality/regression_performance_report.json")
+        #TODO: extract the same project id used in training and save the report in the same project
         ws.add_report(self.project.id, regression_performance_report)
         self.run.finish()
         
