@@ -41,6 +41,7 @@ class InferFlow(FlowSpec):
     @step
     def feature_engg_flow(self):
         print("Feature Engineering")
+        self.stock_data.data = self.stock_data.data.reset_index()
         self.stock_data.data=self.stock_data.data[['date','close']]
         self.stock_data.data.columns = ['ds','y']
         self.next(self.infer_flow)
