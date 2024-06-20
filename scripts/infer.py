@@ -31,20 +31,13 @@ class InferFlow(FlowSpec):
     @step
     def data_load_flow(self):
         from src import DataOps
-
         print("Loading data")
-        self.diabetes = DataOps.feature_engg_class()
-        self.data, self.target = self.diabetes.load_data()
-        self.next(self.data_process_flow)
+        self.stock_data = DataOps.feature_engg_class()
+        self.data=self.stock_data.request_stock_price_hist('AAPL')
+        self.stock_data.data=self.data.tail(5)
 
-    @step
-    def data_process_flow(self):
-        print("Processing data")
-        self.fin_df = self.diabetes.standard_scaling(self.data)
-        self.X_train, self.X_test, self.y_train, self.y_test = self.diabetes.split(
-            self.fin_df, self.target
-        )
         self.next(self.infer_flow)
+    
 
     @environment(vars={'WANDB_API_KEY': os.getenv('WANDB_API_KEY'),
                        'EVI_API': os.getenv('EVI_API')
@@ -54,7 +47,7 @@ class InferFlow(FlowSpec):
         from src import ModelOps
         os.environ["WANDB_API_KEY"] = os.getenv('WANDB_API_KEY') 
         print("Load the model, make predictions") 
-        self.preds=ModelOps.ModelInference().inference(self.X_test)
+        self.preds=ModelOps.ModelInference().inference(self.stock_data.data)
         self.next(self.monitoring_flow)
 
     @step
