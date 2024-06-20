@@ -55,7 +55,7 @@ class InferFlow(FlowSpec):
         os.environ["WANDB_API_KEY"] = os.getenv('WANDB_API_KEY') 
         print("Load the model, make predictions") 
         self.preds=ModelOps.ModelInference().inference(self.X_test)
-        self.next(self.end)
+        self.next(self.monitoring_flow)
 
     @step
     def monitoring_flow(self):
