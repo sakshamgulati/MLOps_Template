@@ -57,7 +57,7 @@ class ModelFit:
         processed_data.add_file(local_path='artifacts/reference_data/output.csv')
 
         #log the data to weights and biases
-        self.run.log_artifact(artifact_or_path = processed_data, name = "refrence_data", type = "dataset")
+        self.run.log_artifact(artifact_or_path = processed_data, name = "reference_data", type = "dataset")
 
         #point to the reference data
         logging.info("Reference data saved to weights and biases")

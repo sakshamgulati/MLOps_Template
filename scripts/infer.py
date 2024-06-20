@@ -46,7 +46,9 @@ class InferFlow(FlowSpec):
         )
         self.next(self.infer_flow)
 
-    @environment(vars={'WANDB_API_KEY': os.getenv('WANDB_API_KEY')})
+    @environment(vars={'WANDB_API_KEY': os.getenv('WANDB_API_KEY'),
+                       'EVI_API': os.getenv('EVI_API')
+                       })
     @step
     def infer_flow(self):
         from src import ModelOps

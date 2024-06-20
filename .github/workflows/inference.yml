@@ -31,6 +31,7 @@ jobs:
     - name: Run Metaflow script
       env:
         WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
+        EVI_API: ${{ secrets.EVI_API }}
       
       run: |
         pipenv install metaflow
