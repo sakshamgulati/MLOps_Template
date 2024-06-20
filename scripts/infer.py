@@ -36,8 +36,14 @@ class InferFlow(FlowSpec):
         self.data=self.stock_data.request_stock_price_hist('AAPL')
         self.stock_data.data=self.data.tail(5)
 
-        self.next(self.infer_flow)
+        self.next(self.feature_engg_flow)
     
+    @step
+    def feature_engg_flow(self):
+        print("Feature Engineering")
+        self.stock_data.data=self.stock_data.data[['date','close']]
+        self.stock_data.data.columns = ['ds','y']
+        self.next(self.infer_flow)
 
     @environment(vars={'WANDB_API_KEY': os.getenv('WANDB_API_KEY'),
                        'EVI_API': os.getenv('EVI_API')
@@ -48,8 +54,9 @@ class InferFlow(FlowSpec):
         os.environ["WANDB_API_KEY"] = os.getenv('WANDB_API_KEY') 
         print("Load the model, make predictions") 
         self.preds=ModelOps.ModelInference().inference(self.stock_data.data)
-        self.next(self.monitoring_flow)
+        self.next(self.feature_engg_flow)
 
+    
     @step
     def monitoring_flow(self):
         from src import ModelOps
