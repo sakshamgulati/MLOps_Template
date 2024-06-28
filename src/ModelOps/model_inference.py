@@ -92,7 +92,6 @@ class ModelInference:
 
         column_mapping.target = target
         column_mapping.prediction = prediction
-        # column_mapping.datetime_features = 'ds'
         column_mapping.datetime='ds'
         column_mapping.id = None
                           
@@ -103,6 +102,9 @@ class ModelInference:
         csv_files = glob.glob(os.path.join(ref_dataset_dir, "*.csv"))
         for csv in csv_files:
             reference_data=pd.read_csv(csv)
+        logging.info("Reference data loaded")
+        logging.info(reference_data.head())
+        logging.info(preds.head())
         regression_performance_report.run(reference_data=reference_data, current_data=preds,
                                         column_mapping=column_mapping)
         os.makedirs("artifacts/model_quality",exist_ok=True)
