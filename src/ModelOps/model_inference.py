@@ -103,8 +103,9 @@ class ModelInference:
         for csv in csv_files:
             reference_data=pd.read_csv(csv)
         logging.info("Reference data loaded")
-        logging.info(reference_data.head())
-        logging.info(preds.head())
+        print(reference_data.head())
+        print("-------------------")
+        print(preds.head())
         regression_performance_report.run(reference_data=reference_data, current_data=preds,
                                         column_mapping=column_mapping)
         os.makedirs("artifacts/model_quality",exist_ok=True)
