@@ -40,10 +40,14 @@ class InferFlow(FlowSpec):
     
     @step
     def feature_engg_flow(self):
+        import pandas as pd
         print("Feature Engineering")
         self.stock_data.data = self.stock_data.data.reset_index()
         self.stock_data.data=self.stock_data.data[['date','close']]
         self.stock_data.data.columns = ['ds','y']
+        self.stock_data.data['ds'] = pd.to_datetime(self.stock_data.data['ds'])
+        self.stock_data.data['y'] = self.stock_data.data['y'].astype(float)
+        print(self.stock_data.data.info())
         self.next(self.infer_flow)
 
     @environment(vars={'WANDB_API_KEY': os.getenv('WANDB_API_KEY'),
@@ -52,9 +56,15 @@ class InferFlow(FlowSpec):
     @step
     def infer_flow(self):
         from src import ModelOps
+        import pandas as pd
         os.environ["WANDB_API_KEY"] = os.getenv('WANDB_API_KEY') 
         print("Load the model, make predictions") 
         self.preds=ModelOps.ModelInference().inference(self.stock_data.data)
+        self.preds=self.preds[['ds','yhat']]
+        self.preds['yhat']=self.preds['yhat'].astype(float)
+        self.preds['ds']=pd.to_datetime(self.preds['ds'])
+        print(self.preds.shape)
+        print(self.preds.info())
         self.next(self.monitoring_flow)
 
     
