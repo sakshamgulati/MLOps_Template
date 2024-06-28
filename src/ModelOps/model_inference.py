@@ -51,6 +51,13 @@ class ModelInference:
             model = model_from_json(fin.read())  # Load model
         logging.info("Model loaded from the registry")
         y_pred = model.predict(X_test)
+        y_pred=y_pred[['ds','yhat']]
+        y_pred['yhat']=y_pred['yhat'].astype(float)
+        #rename yhat as y
+        y_pred.rename(columns={'yhat':'y'},inplace=True)
+        y_pred['ds']=pd.to_datetime(y_pred['ds'])
+        print(y_pred.shape)
+        print(y_pred.info())
         return y_pred
     
     def reference_data_download(self):
@@ -106,12 +113,12 @@ class ModelInference:
         print(reference_data.head())
         print("-------------------")
         print(preds.head())
-        regression_performance_report.run(reference_data=reference_data, current_data=preds,
-                                        column_mapping=column_mapping)
-        os.makedirs("artifacts/model_quality",exist_ok=True)
-        regression_performance_report.save("artifacts/model_quality/regression_performance_report.json")
-        # #TODO: extract the same project id used in training and save the report in the same project
-        ws.add_report(self.project.id, regression_performance_report)
+        # regression_performance_report.run(reference_data=reference_data, current_data=preds,
+        #                                 column_mapping=column_mapping)
+        # os.makedirs("artifacts/model_quality",exist_ok=True)
+        # regression_performance_report.save("artifacts/model_quality/regression_performance_report.json")
+        # # #TODO: extract the same project id used in training and save the report in the same project
+        # ws.add_report(self.project.id, regression_performance_report)
         self.run.finish()
         
         return None

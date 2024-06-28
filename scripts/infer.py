@@ -60,11 +60,6 @@ class InferFlow(FlowSpec):
         os.environ["WANDB_API_KEY"] = os.getenv('WANDB_API_KEY') 
         print("Load the model, make predictions") 
         self.preds=ModelOps.ModelInference().inference(self.stock_data.data)
-        self.preds=self.preds[['ds','yhat']]
-        self.preds['yhat']=self.preds['yhat'].astype(float)
-        self.preds['ds']=pd.to_datetime(self.preds['ds'])
-        print(self.preds.shape)
-        print(self.preds.info())
         self.next(self.monitoring_flow)
 
     
