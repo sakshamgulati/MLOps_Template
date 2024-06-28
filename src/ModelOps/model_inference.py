@@ -8,6 +8,7 @@ import os
 import yaml
 import logging
 from prophet.serialize import  model_from_json
+import glob
 
 class ModelInference:
     """
@@ -99,7 +100,9 @@ class ModelInference:
             RegressionPreset(),
         ])
         # get the reference dataset
-        reference_data = pd.read_csv(os.path.join(ref_dataset_dir,"reference_data.csv"))
+        csv_files = glob.glob(os.path.join(ref_dataset_dir, "*.csv"))
+        for csv in csv_files:
+            reference_data=pd.read_csv(csv)
         regression_performance_report.run(reference_data=reference_data, current_data=preds,
                                         column_mapping=column_mapping)
         os.makedirs("artifacts/model_quality",exist_ok=True)

@@ -65,6 +65,7 @@ class InferFlow(FlowSpec):
         inference=ModelOps.ModelInference()
         print("Monitoring the model performance")
         ref_dataset_dir=inference.reference_data_download()
+        print("Artifact dataset downloaded successfully")
         inference.model_monitoring(ref_dataset_dir,self.preds)
         self.next(self.end)
         
