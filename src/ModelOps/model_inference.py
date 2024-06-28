@@ -118,7 +118,7 @@ class ModelInference:
         os.makedirs("artifacts/model_quality",exist_ok=True)
         regression_performance_report.save("artifacts/model_quality/regression_performance_report.json")
         # #TODO: extract the same project id used in training and save the report in the same project
-        ws.add_report(self.project.id, regression_performance_report)
+        # ws.add_report(self.project.id, regression_performance_report)
         self.run.finish()
         
         return None
