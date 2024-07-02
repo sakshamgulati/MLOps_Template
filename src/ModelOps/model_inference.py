@@ -54,7 +54,7 @@ class ModelInference:
         y_pred=y_pred[['ds','yhat']]
         y_pred['yhat']=y_pred['yhat'].astype(float)
         #rename yhat as y
-        y_pred.rename(columns={'yhat':'y'},inplace=True)
+        y_pred.rename(columns={'yhat':'prediction'},inplace=True)
         y_pred['ds']=pd.to_datetime(y_pred['ds'])
         print(y_pred.shape)
         print(y_pred.info())
