@@ -56,8 +56,6 @@ class ModelInference:
         #rename yhat as y
         y_pred.rename(columns={'yhat':'prediction'},inplace=True)
         y_pred['ds']=pd.to_datetime(y_pred['ds'])
-        print(y_pred.shape)
-        print(y_pred.info())
         return y_pred
     
     def reference_data_download(self):
@@ -89,19 +87,17 @@ class ModelInference:
         from evidently.report import Report
         from evidently.ui.workspace.cloud import CloudWorkspace
 
-        ws = CloudWorkspace(
+        self.ws = CloudWorkspace(
         token=os.getenv('EVI_API'),
         url="https://app.evidently.cloud")
+        
         target = 'y'
         prediction = 'prediction'
-
         column_mapping = ColumnMapping()
-
         column_mapping.target = target
         column_mapping.prediction = prediction
         column_mapping.datetime='ds'
         column_mapping.id = None
-                          
         regression_performance_report = Report(metrics=[
             RegressionPreset(),
         ])
@@ -109,17 +105,13 @@ class ModelInference:
         csv_files = glob.glob(os.path.join(ref_dataset_dir, "*.csv"))
         for csv in csv_files:
             reference_data=pd.read_csv(csv)
-        logging.info("Reference data loaded")
-        print(reference_data.head())
+        reference_data['ds']=pd.to_datetime(reference_data['ds'])
         print("-------------------")
-        print(preds.head())
+        print(preds.info())
+        preds.rename(columns={'prediction':'y'},inplace=True)
         regression_performance_report.run(reference_data=reference_data, current_data=preds,
                                         column_mapping=column_mapping)
         os.makedirs("artifacts/model_quality",exist_ok=True)
         regression_performance_report.save("artifacts/model_quality/regression_performance_report.json")
-        # #TODO: extract the same project id used in training and save the report in the same project
-        project=ws.search_project(self.project_name)
-        ws.add_report(project[0].id, regression_performance_report)
         self.run.finish()
-        
         return None
