@@ -1,8 +1,5 @@
 import logging
-from sklearn.linear_model import LinearRegression
 import wandb
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error, r2_score
 import pandas as pd
 import os
 import yaml
@@ -90,7 +87,7 @@ class ModelInference:
         self.ws = CloudWorkspace(
         token=os.getenv('EVI_API'),
         url="https://app.evidently.cloud")
-        
+        #column mapping because evidently expects the column names to be mapped
         target = 'y'
         prediction = 'prediction'
         column_mapping = ColumnMapping()
@@ -106,8 +103,6 @@ class ModelInference:
         for csv in csv_files:
             reference_data=pd.read_csv(csv)
         reference_data['ds']=pd.to_datetime(reference_data['ds'])
-        print("-------------------")
-        print(preds.info())
         preds.rename(columns={'prediction':'y'},inplace=True)
         regression_performance_report.run(reference_data=reference_data, current_data=preds,
                                         column_mapping=column_mapping)

@@ -1,12 +1,7 @@
 import logging
-from sklearn.linear_model import LinearRegression
 import wandb
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error, r2_score
-import pickle
 import os
 import yaml
-from pathlib import Path
 from prophet import Prophet
 from prophet.serialize import model_to_json
 import pandas as pd
