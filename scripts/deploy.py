@@ -23,31 +23,40 @@ class TrainDeployFlow(FlowSpec):
         from src import DataOps
 
         print("Loading data")
-        self.diabetes = DataOps.feature_engg_class()
-        self.data, self.target = self.diabetes.load_data()
+        self.stock_data = DataOps.feature_engg_class()
+        #replace with any other stock of choice
+        self.data=self.stock_data.request_stock_price_hist('AAPL')
+        self.stock_data.data=self.data
+
         self.next(self.data_process_flow)
 
     @step
     def data_process_flow(self):
         print("Processing data")
-        self.fin_df = self.diabetes.standard_scaling(self.data)
-        self.X_train, self.X_test, self.y_train, self.y_test = self.diabetes.split(
-            self.fin_df, self.target
-        )
+        self.train,self.test=self.stock_data.split(use_prophet=True)
+        print("Data split successfully")
         self.next(self.ml_flow)
 
-    @environment(vars={'WANDB_API_KEY': os.getenv('WANDB_API_KEY')})
+    @environment(vars={'WANDB_API_KEY': os.getenv('WANDB_API_KEY'),
+                       'EVI_API': os.getenv('EVI_API')
+                       })
     @step
     def ml_flow(self):
         from src import ModelOps
-        import wandb
         print("Training model")
-        os.environ["WANDB_API_KEY"] = os.getenv('WANDB_API_KEY') 
-        self.rf_reg = ModelOps.ModelFit()
-        self.model = self.rf_reg.model(
-            self.X_train, self.X_test, self.y_train, self.y_test
-        )
-        self.rf_reg.save_model_to_registry(self.model)
+        os.environ["WANDB_API_KEY"] = os.getenv('WANDB_API_KEY')
+        os.environ["EVI_API"] = os.getenv('EVI_API')
+        if os.getenv('WANDB_API_KEY') is None: raise ValueError("WANDB_API_KEY is not set")
+        if os.getenv('EVI_API') is None: raise ValueError("EVI_API is not set")
+          
+        self.model=ModelOps.ModelFit()
+        #saving reference data for monitoring
+        self.model.save_reference_data(self.train)
+        #returns a report that can be used to monitor the data quality
+        print(self.model.data_quality_check(self.train))
+        self.fitted_model,self.forecast=self.model.model(self.train, self.test)
+        
+        self.model.save_model_to_registry(self.fitted_model)
         self.next(self.end)
 
     @step

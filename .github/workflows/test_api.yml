@@ -1,4 +1,4 @@
-name: Inference
+name: testing_creds
 
 on:
   workflow_dispatch:
@@ -34,5 +34,5 @@ jobs:
         EVI_API: ${{ secrets.EVI_API }}
       
       run: |
-        pipenv install metaflow
-        pipenv run python scripts/infer.py run
+        pipenv install evidently
+        pipenv run python scripts/test_api.py run

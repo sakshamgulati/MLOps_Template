@@ -31,30 +31,50 @@ class InferFlow(FlowSpec):
     @step
     def data_load_flow(self):
         from src import DataOps
-
         print("Loading data")
-        self.diabetes = DataOps.feature_engg_class()
-        self.data, self.target = self.diabetes.load_data()
-        self.next(self.data_process_flow)
+        self.stock_data = DataOps.feature_engg_class()
+        self.data=self.stock_data.request_stock_price_hist('AAPL')
+        self.stock_data.data=self.data.tail(5)
 
+        self.next(self.feature_engg_flow)
+    
     @step
-    def data_process_flow(self):
-        print("Processing data")
-        self.fin_df = self.diabetes.standard_scaling(self.data)
-        self.X_train, self.X_test, self.y_train, self.y_test = self.diabetes.split(
-            self.fin_df, self.target
-        )
+    def feature_engg_flow(self):
+        import pandas as pd
+        print("Feature Engineering")
+        self.stock_data.data = self.stock_data.data.reset_index()
+        self.stock_data.data=self.stock_data.data[['date','close']]
+        self.stock_data.data.columns = ['ds','y']
+        self.stock_data.data['ds'] = pd.to_datetime(self.stock_data.data['ds'])
+        self.stock_data.data['y'] = self.stock_data.data['y'].astype(float)
+        print(self.stock_data.data.info())
         self.next(self.infer_flow)
 
-    @environment(vars={'WANDB_API_KEY': os.getenv('WANDB_API_KEY')})
+    @environment(vars={'WANDB_API_KEY': os.getenv('WANDB_API_KEY'),
+                       'EVI_API': os.getenv('EVI_API')
+                       })
     @step
     def infer_flow(self):
         from src import ModelOps
+        import pandas as pd
         os.environ["WANDB_API_KEY"] = os.getenv('WANDB_API_KEY') 
-        print("Load the model, make predictions") 
-        self.preds=ModelOps.ModelInference().inference(self.X_test)
-        self.next(self.end)
+        print("Load the model, make predictions")
+        self.inference=ModelOps.ModelInference() 
+        self.preds=ModelOps.ModelInference().inference(self.stock_data.data)
+        self.next(self.monitoring_flow)
 
+    
+    @step
+    def monitoring_flow(self):
+        from src import ModelOps
+        os.environ["EVI_API"] = os.getenv('EVI_API')
+        inference=ModelOps.ModelInference()
+        print("Monitoring the model performance")
+        ref_dataset_dir=inference.reference_data_download()
+        print("Artifact dataset downloaded successfully")
+        inference.model_monitoring(ref_dataset_dir,self.preds)
+        self.next(self.end)
+        
     @step
     def end(self):
         print("End of the flow")
