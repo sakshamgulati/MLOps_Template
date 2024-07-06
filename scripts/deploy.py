@@ -24,6 +24,7 @@ class TrainDeployFlow(FlowSpec):
 
         print("Loading data")
         self.stock_data = DataOps.feature_engg_class()
+        #replace with any other stock of choice
         self.data=self.stock_data.request_stock_price_hist('AAPL')
         self.stock_data.data=self.data
 
@@ -45,7 +46,6 @@ class TrainDeployFlow(FlowSpec):
         print("Training model")
         os.environ["WANDB_API_KEY"] = os.getenv('WANDB_API_KEY')
         os.environ["EVI_API"] = os.getenv('EVI_API')
-        #if os.getenv('EVI_API') is None: raise ValueError("EVI_API is not set")
         if os.getenv('WANDB_API_KEY') is None: raise ValueError("WANDB_API_KEY is not set")
         if os.getenv('EVI_API') is None: raise ValueError("EVI_API is not set")
           

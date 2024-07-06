@@ -63,7 +63,6 @@ class ModelInference:
         #Output: Model object
         """
         try:
-            print(f'path:::{self.wandb_entity}/{self.model_name}/reference-dataset:latest')
             ref_dataset = self.run.use_artifact(f'{self.wandb_entity}/{self.model_name}/reference-dataset:latest', type='dataset')
             ref_dataset_dir = ref_dataset.download()
             logging.info(f"Artifact downloaded at: {ref_dataset_dir}")

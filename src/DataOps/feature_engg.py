@@ -54,6 +54,7 @@ class feature_engg_class:
             return None
         self.data = self.data.reset_index()
         if use_prophet:
+            #prepare the data for Prophet, columns are expected to be named 'ds' and 'y'
             self.data=self.data[['date','close']]
             self.data.columns = ['ds','y']
             logging.info("Data prepared for Prophet")
