@@ -1,1 +1,1 @@
-mlflow server --host 127.0.0.1 --port 8080
+python scripts/infer.py step-functions create 

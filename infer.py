@@ -1,9 +1,13 @@
 # class to write metaflow production steps
-from metaflow import FlowSpec, step, IncludeFile, environment
+from metaflow import FlowSpec, step, IncludeFile, environment, schedule, conda_base
 import os
+from datetime import datetime
+from src.DataOps import feature_engg_class
+from src.ModelOps import ModelInference
+import pandas as pd
 
-
-
+@schedule(daily=True)
+# @conda_base(python='3.10', libraries={'wandb': '0.16.6', 'pandas': '2.2.2', 'scikit-learn': '0.24.2', 'prophet':'1.1.5'})
 class InferFlow(FlowSpec):
     """
     This class is used run inference from a trained model in a model repository.
@@ -25,14 +29,17 @@ class InferFlow(FlowSpec):
 
     @step
     def start(self):
+        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        print('time is %s' % now)
         print("Starting the flow")
+        from dotenv import load_dotenv
+        load_dotenv()
         self.next(self.data_load_flow)
 
     @step
     def data_load_flow(self):
-        from src import DataOps
         print("Loading data")
-        self.stock_data = DataOps.feature_engg_class()
+        self.stock_data = feature_engg_class()
         self.data=self.stock_data.request_stock_price_hist('AAPL')
         self.stock_data.data=self.data.tail(5)
 
@@ -40,7 +47,6 @@ class InferFlow(FlowSpec):
     
     @step
     def feature_engg_flow(self):
-        import pandas as pd
         print("Feature Engineering")
         self.stock_data.data = self.stock_data.data.reset_index()
         self.stock_data.data=self.stock_data.data[['date','close']]
@@ -55,20 +61,20 @@ class InferFlow(FlowSpec):
                        })
     @step
     def infer_flow(self):
-        from src import ModelOps
-        import pandas as pd
+        
         os.environ["WANDB_API_KEY"] = os.getenv('WANDB_API_KEY') 
         print("Load the model, make predictions")
-        self.inference=ModelOps.ModelInference() 
-        self.preds=ModelOps.ModelInference().inference(self.stock_data.data)
+        self.inference=ModelInference() 
+        self.preds=ModelInference().inference(self.stock_data.data)
         self.next(self.monitoring_flow)
 
-    
+    @environment(vars={'WANDB_API_KEY': os.getenv('WANDB_API_KEY'),
+                       'EVI_API': os.getenv('EVI_API')
+                       })
     @step
     def monitoring_flow(self):
-        from src import ModelOps
         os.environ["EVI_API"] = os.getenv('EVI_API')
-        inference=ModelOps.ModelInference()
+        inference=ModelInference()
         print("Monitoring the model performance")
         ref_dataset_dir=inference.reference_data_download()
         print("Artifact dataset downloaded successfully")

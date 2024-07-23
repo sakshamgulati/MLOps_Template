@@ -17,6 +17,8 @@ alpha-vantage = "*"
 tqdm = "*"
 evidently = "==0.4.25"
 prophet = "==1.1.5"
+google-cloud-storage = "*"
+google-auth = "*"
 
 [dev-packages]
 ipykernel = "==6.29.4"

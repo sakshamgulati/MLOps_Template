@@ -15,3 +15,7 @@ artifacts/
 __pycache__/
 #add .env file
 .env
+
+.dockerignore
+.Dockerfile.env
+AWSCLIV2.pkg

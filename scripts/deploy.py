@@ -1,11 +1,10 @@
 # class to write metaflow production steps
-from metaflow import FlowSpec, step, Parameter, IncludeFile, environment
+from metaflow import FlowSpec, step, IncludeFile, environment
 import os
 
 class TrainDeployFlow(FlowSpec):
     """
-    to run this flow in your local development environment, run the following command:
-
+    To run this flow in your local development environment, run the following command:
     """
 
     # include the conf/config.yaml file in includefile
