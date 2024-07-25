@@ -1,0 +1,10 @@
+{
+    "model_name": "stock_price_prediction",
+    "project_name": "ml-ops-template",
+    "model_type": "time-series",
+    "saved_model_path": "artifacts/model1/model.pickle",
+    "wandb_entity": "sakshamgulati123",
+    "evidently_team_id": "74fdd884-9679-4693-819b-a6695e652e25",
+    "project_description": "This project explains how to deploy a machine learning model using MLOps and retrain when data drift is observed"
+  }
+  

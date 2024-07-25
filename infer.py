@@ -1,13 +1,28 @@
 # class to write metaflow production steps
-from metaflow import FlowSpec, step, IncludeFile, environment, schedule, conda_base
+from metaflow import FlowSpec, step, IncludeFile, environment, schedule, pypi_base, batch, secrets, retry
 import os
 from datetime import datetime
 from src.DataOps import feature_engg_class
 from src.ModelOps import ModelInference
 import pandas as pd
 
+environment_packages = {
+    'scikit-learn': '1.3.2',
+    'pandas': '2.2.2',
+    'confuse': '2.0.1',
+    'wandb': '0.16.6',
+    'protobuf': '4.25.3',
+    'alpha-vantage': '3.0.0',
+    'tqdm': '4.66.4',
+    'evidently': '0.4.25',
+    'prophet': '1.1.5',
+    'google-cloud-storage': '2.17.0',
+    'google-auth': '2.32.0',
+    'ipykernel': '6.29.4',
+    'pyyaml':'6.0.1'
+}
 @schedule(daily=True)
-# @conda_base(python='3.10', libraries={'wandb': '0.16.6', 'pandas': '2.2.2', 'scikit-learn': '0.24.2', 'prophet':'1.1.5'})
+@pypi_base(python='3.10', packages=environment_packages)
 class InferFlow(FlowSpec):
     """
     This class is used run inference from a trained model in a model repository.
@@ -23,10 +38,12 @@ class InferFlow(FlowSpec):
     """
 
     # include the conf/config.yaml file in includefile
-    includefile = IncludeFile(
-        "configfile", help="Include the config file", default="conf/mlops.yaml"
-    )
-
+    configfile = IncludeFile(
+        'configfile',
+        is_text=False,
+        # required=True,
+        default="conf/configfile.json")
+    
     @step
     def start(self):
         now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -38,7 +55,7 @@ class InferFlow(FlowSpec):
 
     @step
     def data_load_flow(self):
-        print("Loading data")
+        print("Loading data")        
         self.stock_data = feature_engg_class()
         self.data=self.stock_data.request_stock_price_hist('AAPL')
         self.stock_data.data=self.data.tail(5)
@@ -56,25 +73,26 @@ class InferFlow(FlowSpec):
         print(self.stock_data.data.info())
         self.next(self.infer_flow)
 
-    @environment(vars={'WANDB_API_KEY': os.getenv('WANDB_API_KEY'),
-                       'EVI_API': os.getenv('EVI_API')
-                       })
+    
+    @secrets(sources=['wandb_api_key'])
+    @retry
+    @batch(memory=8000, cpu=1)
     @step
     def infer_flow(self):
-        
-        os.environ["WANDB_API_KEY"] = os.getenv('WANDB_API_KEY') 
+        import json
         print("Load the model, make predictions")
-        self.inference=ModelInference() 
-        self.preds=ModelInference().inference(self.stock_data.data)
+        self.inference=ModelInference(json.loads(self.configfile)) 
+        self.preds=ModelInference(json.loads(self.configfile)).inference(self.stock_data.data)
         self.next(self.monitoring_flow)
+    
 
-    @environment(vars={'WANDB_API_KEY': os.getenv('WANDB_API_KEY'),
-                       'EVI_API': os.getenv('EVI_API')
-                       })
+    
+    @secrets(sources=['wandb_api_key','evidently_api_key']) ##https://docs.metaflow.org/scaling/secrets
     @step
     def monitoring_flow(self):
-        os.environ["EVI_API"] = os.getenv('EVI_API')
-        inference=ModelInference()
+        import json
+        os.environ["EVI_API"] = os.environ['evi_key']
+        inference=ModelInference(json.loads(self.configfile))
         print("Monitoring the model performance")
         ref_dataset_dir=inference.reference_data_download()
         print("Artifact dataset downloaded successfully")

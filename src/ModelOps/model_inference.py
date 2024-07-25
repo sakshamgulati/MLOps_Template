@@ -14,16 +14,13 @@ class ModelInference:
 
     """
 
-    def __init__(self):
+    def __init__(self,config):
 
-        # Open and read the YAML file
-        with open('conf/mlops.yaml', 'r') as file:
-            config = yaml.safe_load(file)
         self.model_name = config['model_name']
         self.project_name=config['project_name']
         self.model_type=config['model_type']
         self.wandb_entity=config['wandb_entity']
-        
+        os.environ["WANDB_API_KEY"] = os.environ['wandb_key']
         self.run = wandb.init(project=self.model_name,job_type=self.model_type)
         logging.info(f"Weights and Biases initiated with Run ID: {self.run.id}")
         logging.info(
